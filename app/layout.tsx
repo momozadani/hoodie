@@ -4,7 +4,6 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Nav from "@/components/Nav";
 
-
 export const dynamic = "force-dynamic";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {

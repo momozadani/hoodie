@@ -1,18 +1,17 @@
-import {Button} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { signIn } from "@/auth";
-
-
 
 export default function SignIn() {
   return (
-     <form
+    <form
       action={async () => {
-        "use server"
-        await signIn()
+        "use server";
+        await signIn();
       }}
     >
-      <Button variant="ghost" color="primary" type="submit">Sign in</Button>
+      <Button variant="ghost" color="primary" type="submit">
+        Sign in
+      </Button>
     </form>
-     
-  )
-} 
+  );
+}

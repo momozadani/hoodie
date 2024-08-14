@@ -1,9 +1,9 @@
-import { auth } from '@/auth';
-import { NextResponse } from 'next/server';
+import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
-export const POST =  auth(function GET(req) {
+export const POST = auth(function GET(req) {
   if (req.auth) {
-    return NextResponse.json("this the result") 
-}
-  return NextResponse.json({ message: "Not authenticated" }, { status: 401 })
-})
+    return NextResponse.json("this the result");
+  }
+  return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+});

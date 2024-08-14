@@ -1,13 +1,12 @@
-import { auth  } from "@/auth"
-import { NextResponse } from "next/server"
-
+import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
 export default auth((req) => {
-  if (!req.auth && req.nextUrl.origin !=='/') {
-    console.log("api is getting worked on", req)
-    return NextResponse.redirect(new URL('/',req.nextUrl.origin))
+  if (!req.auth && req.nextUrl.origin !== "/") {
+    console.log("api is getting worked on", req);
+    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
   }
-})
+});
 
 export const config = {
   matcher: [
@@ -18,8 +17,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-      "/((?!_next/static|_next/image|favicon.ico|$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|$).*)",
   ],
-}
-
-
+};
