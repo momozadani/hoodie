@@ -1,51 +1,86 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { create } from "../action";
+import { createAction } from "../action";
 import { colors, hoodieSize } from "../lib/data";
 import { Select, SelectItem } from "@nextui-org/select";
 import { RadioGroup, Radio } from "@nextui-org/radio";
+import { useFormState } from "react-dom";
+import { Checkbox } from "@nextui-org/checkbox";
+import { useState } from "react";
 
 export default function Order() {
+  const [isSelected, setIsSelected] = useState(false);
+  const [state, formAction, pending] = useFormState(createAction, {
+    message: "input not validated",
+  });
+  console.log("state ", state);
   return (
-    <div className="mx-24 mt-16 min-h-screen">
-      <form
-        className="flex flex-col justify-between items-center w-full"
-        action={create}
-      >
-        <Select
-          name="size"
-          label="Favorite size"
-          placeholder="Select an size for hoodie"
-          className="max-w-xs"
-        >
-          {hoodieSize.map((hoodie) => (
-            <SelectItem key={hoodie}>{hoodie}</SelectItem>
-          ))}
-        </Select>
+    <div className="mx-80 min-h-screen flex justify-center">
+      <form className="flex flex-col justify-evenly w-1/2" action={formAction}>
+        <div className="flex gap-6">
+          <Select
+            name="size"
+            label="Favorite size"
+            placeholder="Select an size for hoodie"
+            className="max-w-xs"
+          >
+            {hoodieSize.map((hoodie) => (
+              <SelectItem key={hoodie}>{hoodie}</SelectItem>
+            ))}
+          </Select>
 
-        <Select
-          name="size"
-          label="Favorite color"
-          placeholder="Select a color for hoodie"
-          className="max-w-xs mt-8"
-        >
-          {colors.map((color) => (
-            <SelectItem key={color}>{color}</SelectItem>
-          ))}
-        </Select>
+          <Select
+            required
+            name="color"
+            label="Favorite color"
+            placeholder="Select a color for hoodie"
+            className="max-w-xs"
+          >
+            {colors.map((color) => (
+              <SelectItem key={color}>{color}</SelectItem>
+            ))}
+          </Select>
+        </div>
         <RadioGroup
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
-          className="mt-8"
+          name="stickColor"
         >
-          <Radio value="schwarz">Buenos Aires</Radio>
-          <Radio value="weiß">Sydney</Radio>
+          <Radio value="schwarz">schwarz</Radio>
+          <Radio value="weiß">weiß</Radio>
         </RadioGroup>
-        <div className=" mt-7">
-          <Button color="primary" variant="faded" type="submit">
-            submit
-          </Button>
+
+        <RadioGroup
+          label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
+          name="location"
+        >
+          <Radio required value="tower">
+            in den Tower
+          </Radio>
+          <Radio required value="home">
+            zu mir nach Hause (bitte beachte, dass das mit Mehrkosten (6,99€)
+            verbunden ist, die du selbst trägst)
+          </Radio>
+        </RadioGroup>
+
+        <div>
+          <div>
+            Ich erkläre mich damit einverstanden, dass die einmalige monatliche
+            Eigenleistung in Höhe von 15,00 Euro + 6,99€ für den Versand, falls
+            zutreffend von meinem Nettoverdienst einbehalten wird
+          </div>
+          <input
+            type="checkbox"
+            name="consent"
+            className="mt-8"
+            defaultValue={"off"}
+          />
+          <span className="ml-4">ja*</span>
         </div>
+
+        <Button color="primary" variant="ghost" type="submit">
+          submit
+        </Button>
       </form>
     </div>
   );

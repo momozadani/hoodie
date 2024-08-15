@@ -15,7 +15,9 @@ export default function ActiveRoute({
   const pathname = usePathname();
   return (
     <NavbarItem isActive={pathname === path}>
-      <Link href={`${path}`}>{children}</Link>
+      <Link color="foreground" href={`${path}`}>
+        {children}
+      </Link>
     </NavbarItem>
   );
 }

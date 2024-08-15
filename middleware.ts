@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export default auth((req) => {
   if (!req.auth && req.nextUrl.origin !== "/") {
-    console.log("api is getting worked on", req);
     return NextResponse.redirect(new URL("/", req.nextUrl.origin));
   }
 });

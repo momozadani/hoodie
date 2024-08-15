@@ -15,7 +15,7 @@ export default async function Nav() {
   const session = await auth();
 
   return (
-    <Navbar>
+    <Navbar isBordered>
       <NavbarBrand>
         <AcmeLogo />
         <p className="font-bold text-inherit">Shop</p>
