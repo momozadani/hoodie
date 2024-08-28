@@ -14,7 +14,6 @@ export default function Order() {
   const [state, formAction, pending] = useFormState(createAction, {
     message: "input not validated",
   });
-  console.log("state ", state);
   return (
     <div className="mx-80 min-h-screen flex justify-center">
       <form className="flex flex-col justify-evenly w-1/2" action={formAction}>
@@ -78,7 +77,12 @@ export default function Order() {
           <span className="ml-4">ja*</span>
         </div>
 
-        <Button color="primary" variant="ghost" type="submit">
+        <Button
+          color="primary"
+          variant="ghost"
+          type="submit"
+          disabled={pending}
+        >
           submit
         </Button>
       </form>

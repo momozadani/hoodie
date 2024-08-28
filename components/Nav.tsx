@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Navbar,
   NavbarBrand,
@@ -5,15 +7,13 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar";
 import { Button } from "@nextui-org/button";
-import Link from "next/link";
 import { AcmeLogo } from "@/components/AcmeLogo";
 import { auth, signIn } from "@/auth";
 import ActiveRoute from "./ActiveRoute";
-import SignIn from "./sign-in";
+import SignIn from "./Sign-in";
+import { Session } from "next-auth";
 
-export default async function Nav() {
-  const session = await auth();
-
+export default function Nav({ session }: { session: Session | null }) {
   return (
     <Navbar isBordered>
       <NavbarBrand>
@@ -29,7 +29,11 @@ export default async function Nav() {
       <NavbarContent justify="end">
         {session ? (
           <NavbarItem className="flex">
-            <Button color="success" disabled>
+            <Button
+              radius="full"
+              disabled
+              className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg "
+            >
               logged in
             </Button>
           </NavbarItem>

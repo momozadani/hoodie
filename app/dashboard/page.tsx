@@ -1,5 +1,3 @@
-import { auth } from "../../auth";
-
-export default async function Dashboard() {
-  return <div>Hello this is dashboard </div>;
+export default function DashboardPage() {
+  return <div>Hello this is dashboard with users</div>;
 }
