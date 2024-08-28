@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "./../prisma/prisma";
 import { join } from "path";
 import { writeFile } from "fs/promises";
+import { permanentRedirect, redirect, RedirectType } from "next/navigation";
 
 const schema = z.object({
   size: z.string(),
@@ -61,7 +62,7 @@ export async function uploadAction(prevState: any, formData: FormData | null) {
       const fileName = uniqueSuffix + validation.data.file.name;
       const uploadDir = join(process.cwd(), "public");
       await writeFile(`${uploadDir}/${fileName}`, buffer);
-      const users = prisma.hoodieVariant.create({
+      await prisma.hoodieVariant.create({
         data: {
           size: validation.data.size,
           color: validation.data.color,
@@ -70,8 +71,9 @@ export async function uploadAction(prevState: any, formData: FormData | null) {
           imagePath: fileName,
         },
       });
+      return { message: "ok" };
     } catch (e) {
-      console.log("an error occured");
+      console.log("an error occured", e);
       return { message: "error" };
     }
   }
