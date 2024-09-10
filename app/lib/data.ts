@@ -20,7 +20,6 @@ export const hoodieSize = [
   "5XL",
 ];
 
-
 export const colors = [
   "BLUE SOUL",
   "AQUA BLUES",
@@ -35,3 +34,7 @@ export const colors = [
   "FRAICHE PEACHES",
   "KHAKI CHIC",
 ];
+
+export const ADMIN_ROLE = ["mohammad.akbari@hmmh.de"];
+export const ADMIN = "admin";
+export const USER = "user";

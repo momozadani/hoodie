@@ -1,10 +1,9 @@
-"use client";
-
 import ProductComponent from "@/components/ProductComponent";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
 
 export default function ProductPage() {
+  
   return (
     <div className="w-full">
       <div className="p-3 bg-slate-600 flex justify-center w-full">
