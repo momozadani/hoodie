@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { createAction } from "../action";
+import { createHoodieAction } from "../action";
 import { colors, hoodieSize } from "../lib/data";
 import { Select, SelectItem } from "@nextui-org/select";
 import { RadioGroup, Radio } from "@nextui-org/radio";
@@ -11,8 +11,8 @@ import { useState } from "react";
 
 export default function Order() {
   const [isSelected, setIsSelected] = useState(false);
-  const [state, formAction, pending] = useFormState(createAction, {
-    message: "input not validated",
+  const [state, formAction, pending] = useFormState(createHoodieAction, {
+    message: "input not valid",
   });
   return (
     <div className="mx-80 min-h-screen flex justify-center">
@@ -21,7 +21,7 @@ export default function Order() {
           <Select
             name="size"
             label="Favorite size"
-            placeholder="Select an size for hoodie"
+            placeholder="Select a size for hoodie"
             className="max-w-xs"
           >
             {hoodieSize.map((hoodie) => (

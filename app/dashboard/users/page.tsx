@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import UsersComponent from "@/components/UsersComponent";
 const rows = [
   {
@@ -41,6 +42,8 @@ const columns = [
   },
 ];
 
-export default function UserPage() {
+export default async function UserPage() {
+  const session = await auth();
+  console.log("session", session);
   return <UsersComponent columns={columns} rows={rows} />;
 }

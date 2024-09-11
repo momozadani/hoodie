@@ -11,26 +11,24 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  firstName String
-  lastName  String
-  email     String  @unique
-  role      String
-  orders    Order[]
+  id             Int     @id @default(autoincrement())
+  firstName      String
+  lastName       String
+  email          String  @unique
+  customerNumber String
+  orders         Order[]
 }
 
 model HoodieVariant {
   id        Int     @id @default(autoincrement())
-  size      String // Size of the hoodie
-  color     String // Color of the hoodie
-  quantity  Int // Number of available hoodies in this combination
-  available Boolean @default(true) // Is this variant available for purchase?
+  quantity  Int
+  available Boolean @default(true)
   imagePath String?
   Order     Order[]
-  Size      Size?   @relation(fields: [sizeId], references: [id])
-  sizeId    Int?
-  Color     Color?  @relation(fields: [colorId], references: [id])
-  colorId   Int?
+  Size      Size    @relation(fields: [sizeId], references: [id])
+  sizeId    Int
+  Color     Color   @relation(fields: [colorId], references: [id])
+  colorId   Int
 }
 
 model Size {
@@ -49,14 +47,14 @@ model Order {
   id              Int           @id @default(autoincrement())
   user            User          @relation(fields: [userId], references: [id])
   userId          Int
-  hoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id])
+  HoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id])
   hoodieVariantId Int
   quantity        Int
   location        Location      @relation(fields: [locationId], references: [id])
+  locationId      Int
   createdAt       DateTime      @default(now())
   StickColor      StickColor    @relation(fields: [stickColorId], references: [id])
   stickColorId    Int
-  locationId      Int
 }
 
 model StickColor {

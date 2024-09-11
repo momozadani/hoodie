@@ -28,13 +28,21 @@ const hoodieSchema = z.object({
   available: z.coerce.boolean(),
 });
 
-export async function createAction(prevState: any, formData: FormData | null) {
+export async function createHoodieAction(
+  prevState: any,
+  formData: FormData | null
+) {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
   const form = Object.fromEntries(formData!.entries());
   const res = schema.safeParse(form);
 
   if (!res.success) {
     return { message: "error occured" };
   }
+
   return { message: "working" };
 }
 
@@ -62,15 +70,15 @@ export async function uploadAction(prevState: any, formData: FormData | null) {
       const fileName = uniqueSuffix + validation.data.file.name;
       const uploadDir = join(process.cwd(), "public");
       await writeFile(`${uploadDir}/${fileName}`, buffer);
-      await prisma.hoodieVariant.create({
-        data: {
-          size: validation.data.size,
-          color: validation.data.color,
-          quantity: validation.data.quantity,
-          available: validation.data.available,
-          imagePath: fileName,
-        },
-      });
+      // await prisma.hoodieVariant.create({
+      //   data: {
+      //     size: await prisma.size.findFirst(validation.data.size),
+      //      color: validation.data.color,
+      //     quantity: validation.data.quantity,
+      //     available: validation.data.available,
+      //     imagePath: fileName,
+      //   },
+      // });
       return { message: "ok" };
     } catch (e) {
       console.log("an error occured", e);
