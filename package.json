@@ -24,7 +24,7 @@
     "@nextui-org/table": "^2.0.39",
     "@nextui-org/theme": "^2.2.9",
     "@prisma/client": "^5.18.0",
-    "framer-motion": "^11.3.24",
+    "framer-motion": "^11.5.4",
     "next": "14.2.5",
     "next-auth": "^5.0.0-beta.20",
     "react": "^18",
