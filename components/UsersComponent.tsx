@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table";
+import { IoCloudDownloadSharp } from "react-icons/io5";
 
 export default function UsersComponent({
   columns,
@@ -32,12 +33,21 @@ export default function UsersComponent({
         method: "GET",
       });
       const data = await response.json();
+      console.log("this is data", data);
     } catch (err) {
       console.log("i am getting an error", err);
     }
   }
   return (
-    <>
+    <div className="w-full flex flex-col pt-10">
+      <Button
+        startContent={<IoCloudDownloadSharp />}
+        className="w-1/6 self-end"
+        color="success"
+        onClick={handleExport}
+      >
+        export to csv
+      </Button>
       <Table aria-label="Example table with dynamic content">
         <TableHeader columns={columns}>
           {(column) => (
@@ -54,9 +64,6 @@ export default function UsersComponent({
           )}
         </TableBody>
       </Table>
-      <Button color="primary" onClick={handleExport}>
-        click me to make a request
-      </Button>
-    </>
+    </div>
   );
 }

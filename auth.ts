@@ -13,7 +13,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     jwt({ token }) {
-      console.log("this is token ", token);
       if (ADMIN_ROLE.includes(token.email?.toLowerCase() || "")) {
         token.role = "admin";
         return token;

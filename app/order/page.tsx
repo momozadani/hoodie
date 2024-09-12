@@ -6,16 +6,52 @@ import { colors, hoodieSize } from "../lib/data";
 import { Select, SelectItem } from "@nextui-org/select";
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { useFormState } from "react-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Checkbox, CheckboxGroup } from "@nextui-org/checkbox";
+import { ZodError } from "zod";
 
 export default function Order() {
   const [isSelected, setIsSelected] = useState(false);
   const [state, formAction, pending] = useFormState(orderHoodieAction, {
-    message: "input not valid",
+    message: [],
   });
-  const [isConsent, setIsConsent] = useState<string[]>([]);
+  const [hasError, setHasError] = useState({
+    stickColor: false,
+    consent: false,
+    customerNumber: false,
+    size: false,
+    color: false,
+  });
+  console.log("state message", state?.message);
+  useEffect(() => {
+    if (Array.isArray(state?.message)) {
+      const newError = { ...hasError };
+      state.message.forEach((error) => {
+        if (error.path.includes("stickColor")) {
+          newError.stickColor = true;
+        }
+        if (error.path.includes("consent")) {
+          newError.consent = true;
+        }
+        if (error.path.includes("customerNumber")) {
+          newError.customerNumber = true;
+        }
+        if (error.path.includes("size")) {
+          newError.size = true;
+        }
+        if (error.path.includes("color")) {
+          newError.color = true;
+        }
+      });
+      setHasError(newError);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+  function handleFocus(field: string) {
+    setHasError((prevError) => ({ ...prevError, [field]: false }));
+  }
+
   return (
     <div className="mx-80 min-h-screen flex justify-center">
       <form className="flex flex-col justify-evenly w-1/2" action={formAction}>
@@ -25,6 +61,9 @@ export default function Order() {
             label="Favorite size"
             placeholder="Select a size for hoodie"
             className="max-w-xs"
+            errorMessage="please select a size"
+            isInvalid={hasError.size}
+            onFocus={() => handleFocus("size")}
           >
             {hoodieSize.map((hoodie) => (
               <SelectItem key={hoodie}>{hoodie}</SelectItem>
@@ -37,6 +76,9 @@ export default function Order() {
             label="Favorite color"
             placeholder="Select a color for hoodie"
             className="max-w-xs"
+            errorMessage="please select a color"
+            isInvalid={hasError.color}
+            onFocus={() => handleFocus("color")}
           >
             {colors.map((color) => (
               <SelectItem key={color}>{color}</SelectItem>
@@ -49,7 +91,10 @@ export default function Order() {
           }}
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
           name="stickColor"
-          errorMessage={"Bitte eine Farbe auswählen"}
+          errorMessage="please select a stick color"
+          isRequired
+          isInvalid={hasError.stickColor}
+          onFocus={() => handleFocus("stickColor")}
         >
           <Radio value="schwarz">schwarz</Radio>
           <Radio value="weiß">weiß</Radio>
@@ -72,24 +117,25 @@ export default function Order() {
           </Radio>
         </RadioGroup>
 
-        <div>
-          <label htmlFor="consent">
-            Ich erkläre mich damit einverstanden, dass die einmalige monatliche
+        <CheckboxGroup
+          label=" Ich erkläre mich damit einverstanden, dass die einmalige monatliche
             Eigenleistung in Höhe von 15,00 Euro + 6,99€ für den Versand, falls
-            zutreffend von meinem Nettoverdienst einbehalten wird
-          </label>
+            zutreffend von meinem Nettoverdienst einbehalten wird"
+          errorMessage="please consent"
+          isInvalid={hasError.consent}
+          onFocus={() => handleFocus("consent")}
+        >
+          <input type="hidden" name="consent" value="" />
           <Checkbox
             type="checkbox"
             name="consent"
-            className="mt-8"
-            id="consent"
             value="true"
             required
+            className="pt-4"
           >
             Ja*
           </Checkbox>
-          <input type="hidden" name="consent" value="false" />
-        </div>
+        </CheckboxGroup>
         <div>
           <label htmlFor="customerNumber">
             *Bitte trage hier noch deine Personalnummer ein (diese benötigt HR
@@ -103,6 +149,9 @@ export default function Order() {
             type="number"
             inputMode="numeric"
             isClearable
+            errorMessage="number is too short"
+            isInvalid={hasError.customerNumber}
+            onFocus={() => handleFocus("customerNumber")}
           />
         </div>
 

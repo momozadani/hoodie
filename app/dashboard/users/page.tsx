@@ -43,7 +43,5 @@ const columns = [
 ];
 
 export default async function UserPage() {
-  const session = await auth();
-  console.log("session", session);
   return <UsersComponent columns={columns} rows={rows} />;
 }

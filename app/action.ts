@@ -12,12 +12,17 @@ import { ADMIN } from "./lib/data";
 import { user } from "@nextui-org/theme";
 
 const schema = z.object({
-  size: z.string(),
-  color: z.string(),
+  size: z.string().min(1),
+  color: z.string().min(1),
   stickColor: z.string(),
   location: z.string(),
   customerNumber: z.string().min(5),
-  consent: z.coerce.boolean(),
+  consent: z.coerce.boolean().refine(
+    (val) => {
+      return val === true;
+    },
+    { message: "you must consent" }
+  ),
 });
 const ACCEPTED_FILE_TYPES = ["image/png", "image/jpg"];
 
@@ -39,18 +44,15 @@ export async function orderHoodieAction(
     redirect("/");
   }
 
-  console.log("this is the result", formData);
   const form = Object.fromEntries(formData!.entries());
   const res = schema.safeParse(form);
-  console.log("this is the result", res.error?.errors);
+  console.log("this is res", form);
   if (!res.success) {
     return { message: res.error.errors };
   }
   const { size, color, stickColor, location, consent, customerNumber } =
     res.data;
-  if (consent === false) {
-    return { message: "not consented" };
-  }
+
   const locationRecord = await prisma.location.findFirst({
     where: {
       name: location,
@@ -91,7 +93,15 @@ export async function orderHoodieAction(
       customerNumber: customerNumber,
     },
   });
-  return { message: "success" };
+  const orderRecord = await prisma.order.create({
+    data: {
+      hoodieVariantId: hoodieVariantRecord!.id,
+      userId: userRecord.id,
+      locationId: locationRecord!.id,
+      stickColorId: stickColorRecord!.id,
+      quantity: 1,
+    },
+  });
 }
 
 export async function signInAction() {
