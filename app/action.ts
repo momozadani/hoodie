@@ -68,11 +68,12 @@ export async function orderHoodieAction(
       name: size,
     },
   });
-  const stickColorRecord = await prisma.location.findFirst({
+  const stickColorRecord = await prisma.stickColor.findFirst({
     where: {
       name: stickColor,
     },
   });
+  console.log("stickColo", stickColorRecord);
   const hoodieVariantRecord = await prisma.hoodieVariant.findFirst({
     where: {
       colorId: colorRecord?.id,

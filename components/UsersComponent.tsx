@@ -11,6 +11,11 @@ import {
   TableRow,
 } from "@nextui-org/table";
 import { IoCloudDownloadSharp } from "react-icons/io5";
+import { User, FlattenedUser } from "../types/user";
+
+interface DataUser {
+  users: User[];
+}
 
 export default function UsersComponent({
   columns,
@@ -27,17 +32,57 @@ export default function UsersComponent({
     status: string;
   }[];
 }) {
+  const headers: (keyof FlattenedUser)[] = [
+    "Vorname",
+    "Nachname",
+    "PersonalNummer",
+    "HoodieFarbe",
+    "HoodieSize",
+    "StickFarbe",
+    "Ort",
+    "email",
+  ];
   async function handleExport() {
     try {
       const response = await fetch("/api/exportCSV", {
         method: "GET",
       });
-      const data = await response.json();
-      console.log("this is data", data);
+      const data: DataUser = await response.json();
+      const rows = data.users.flatMap(flattUsers);
+      const csvContent = [
+        headers.join(","),
+        ...rows.map((row) => headers.map((header) => row[header]).join(",")),
+      ].join("\n");
+      downloadData("\uFEFF" + csvContent);
+      console.log("this is", csvContent);
     } catch (err) {
       console.log("i am getting an error", err);
     }
   }
+
+  const flattUsers = (user: User) => {
+    return user.orders.map((order) => ({
+      Vorname: user?.lastName ?? "",
+      Nachname: user?.firstName ?? "",
+      email: user?.email ?? "",
+      PersonalNummer: user?.customerNumber ?? "",
+      HoodieFarbe: order?.HoodieVariant?.Color?.name ?? "",
+      HoodieSize: order?.HoodieVariant?.Size?.name ?? "",
+      Ort: order?.location?.name ?? "",
+      StickFarbe: order?.StickColor?.name ?? "",
+    }));
+  };
+
+  const downloadData = (data: string) => {
+    const csvData = new Blob([data], { type: "text/csv;charset=utf-8;" });
+    const csvURL = URL.createObjectURL(csvData);
+    const link = document.createElement("a");
+    link.href = csvURL;
+    link.download = "data.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <div className="w-full flex flex-col pt-10">
       <Button
