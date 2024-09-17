@@ -35,7 +35,9 @@ export default function Error({
           className="bg-red-100 border border-red-400 text-red-700  p-3 rounded relative flex justify-center items-center mb-3"
           role="alert"
         >
-          <strong className="font-bold">Something went wrong!</strong>
+          <strong className="font-bold">
+            Something went wrong! {error.message}
+          </strong>
           <MdError className="ml-3" />
         </div>
 

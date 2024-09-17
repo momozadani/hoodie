@@ -131,13 +131,13 @@ export default function UsersComponent({
                         href={"users/" + item.id}
                         className="flex justify-between items-center"
                       >
-                        View the User
+                        View the orders
                         <FaEye />
                       </Link>
                     </DropdownItem>
                     <DropdownItem textValue="Export">
                       <div className="flex justify-between items-center">
-                        Export the User
+                        Export the user/orders
                         <IoCloudDownloadSharp />
                       </div>
                     </DropdownItem>
@@ -149,7 +149,7 @@ export default function UsersComponent({
                         href={"users/" + item.id}
                         className="flex justify-between items-center"
                       >
-                        Delete User
+                        Delete the user
                         <MdDeleteForever />
                       </Link>
                     </DropdownItem>

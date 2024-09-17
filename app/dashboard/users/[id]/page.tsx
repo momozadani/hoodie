@@ -7,13 +7,18 @@ export default async function ShowUser({ params }: { params: { id: string } }) {
     where: {
       userId: parseInt(params.id),
     },
+    include: {
+      HoodieVariant: true,
+      location: true,
+      StickColor: true,
+    },
   });
   if (getOrdersOfUser.length === 0) {
-    throw new Error("Failed to fetch the data");
+    throw new Error("something went wrong with getting the user data");
   }
   return (
-    <div>
-      <UserTable row={"s"} />
+    <div className="w-full">
+      <UserTable rows={getOrdersOfUser} />
     </div>
   );
 }

@@ -9,32 +9,32 @@ import {
   TableRow,
 } from "@nextui-org/table";
 
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
+// const rows = [
+//   {
+//     key: "1",
+//     name: "Tony Reichert",
+//     role: "CEO",
+//     status: "Active",
+//   },
+//   {
+//     key: "2",
+//     name: "Zoey Lang",
+//     role: "Technical Lead",
+//     status: "Paused",
+//   },
+//   {
+//     key: "3",
+//     name: "Jane Fisher",
+//     role: "Senior Developer",
+//     status: "Active",
+//   },
+//   {
+//     key: "4",
+//     name: "William Howard",
+//     role: "Community Manager",
+//     status: "Vacation",
+//   },
+// ];
 
 const columns = [
   {
@@ -55,9 +55,26 @@ const columns = [
   },
 ];
 
-interface OrderType {}
+interface OrderType {
+  id: string;
+  HoodieVariant: {
+    id: number;
+    available: boolean;
+    imagePath: string | null;
+    sizeId: number;
+    colorId: number;
+  };
+  location: {
+    id: number;
+    name: string;
+  };
+  StickColor: {
+    id: number;
+    name: string;
+  };
+}
 
-export default function UserTable({ row }) {
+export default function UserTable({ rows }: { rows: OrderType[] }) {
   return (
     <Table
       aria-label="Example table with dynamic content"
@@ -69,9 +86,11 @@ export default function UserTable({ row }) {
       </TableHeader>
       <TableBody items={rows}>
         {(item) => (
-          <TableRow key={item.key}>
-            <TableCell>{item.name}</TableCell>
-            <TableCell>{item.role}</TableCell>
+          <TableRow key={item.id}>
+            <TableCell>{item.id}</TableCell>
+            <TableCell>{item.id}</TableCell>
+            <TableCell>{item.id}</TableCell>
+            <TableCell>{item.id}</TableCell>
           </TableRow>
         )}
       </TableBody>
