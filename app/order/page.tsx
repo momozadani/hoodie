@@ -57,6 +57,7 @@ export default function Order() {
       <form className="flex flex-col justify-evenly w-1/2" action={formAction}>
         <div className="flex gap-6">
           <Select
+            color="primary"
             name="size"
             label="Favorite size"
             placeholder="Select a size for hoodie"
@@ -66,11 +67,14 @@ export default function Order() {
             onFocus={() => handleFocus("size")}
           >
             {hoodieSize.map((hoodie) => (
-              <SelectItem key={hoodie}>{hoodie}</SelectItem>
+              <SelectItem textValue="hoodie size" key={hoodie}>
+                {hoodie}
+              </SelectItem>
             ))}
           </Select>
 
           <Select
+            color="primary"
             required
             name="color"
             label="Favorite color"
@@ -86,9 +90,7 @@ export default function Order() {
           </Select>
         </div>
         <RadioGroup
-          classNames={{
-            label: "text-black",
-          }}
+          color="primary"
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
           name="stickColor"
           errorMessage="please select a stick color"
@@ -101,9 +103,7 @@ export default function Order() {
         </RadioGroup>
 
         <RadioGroup
-          classNames={{
-            label: "text-black",
-          }}
+          color="primary"
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
           name="location"
           defaultValue={"tower"}
@@ -118,7 +118,7 @@ export default function Order() {
         </RadioGroup>
 
         <CheckboxGroup
-          label=" Ich erkläre mich damit einverstanden, dass die einmalige monatliche
+          label="Ich erkläre mich damit einverstanden, dass die einmalige monatliche
             Eigenleistung in Höhe von 15,00 Euro + 6,99€ für den Versand, falls
             zutreffend von meinem Nettoverdienst einbehalten wird"
           errorMessage="please consent"
@@ -136,24 +136,26 @@ export default function Order() {
             Ja*
           </Checkbox>
         </CheckboxGroup>
-        <div>
-          <label htmlFor="customerNumber">
-            *Bitte trage hier noch deine Personalnummer ein (diese benötigt HR
+
+        <Input
+          classNames={{
+            label: "text-medium text-foreground-500",
+          }}
+          color="primary"
+          label="*Bitte trage hier noch deine Personalnummer ein (diese benötigt HR
             für die Abrechnung, du findest sie auf deiner digitalen
-            Gehaltsabrechnung)
-          </label>
-          <Input
-            className="pt-3"
-            id="customerNumber"
-            name="customerNumber"
-            type="number"
-            inputMode="numeric"
-            isClearable
-            errorMessage="number is too short"
-            isInvalid={hasError.customerNumber}
-            onFocus={() => handleFocus("customerNumber")}
-          />
-        </div>
+            Gehaltsabrechnung)"
+          placeholder=" "
+          id="customerNumber"
+          name="customerNumber"
+          type="number"
+          inputMode="numeric"
+          labelPlacement="outside"
+          isClearable
+          errorMessage="number is too short"
+          isInvalid={hasError.customerNumber}
+          onFocus={() => handleFocus("customerNumber")}
+        />
 
         <Button
           color="primary"

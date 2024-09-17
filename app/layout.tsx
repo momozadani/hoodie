@@ -8,7 +8,7 @@ import { auth } from "@/auth";
 export const dynamic = "force-dynamic";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
-  title: "Shop",
+  title: "HoodieHub",
   description: "Hoodies bestellen",
 };
 
@@ -19,7 +19,10 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    <html lang="en" className="white">
+    <html
+      lang="en"
+      className="dark dark:bg-gray-800 dark:text-white bg-white text-black"
+    >
       <body>
         <Providers>
           <Nav session={session} />

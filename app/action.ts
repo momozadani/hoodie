@@ -4,7 +4,7 @@ import { z } from "zod";
 import { auth, signIn } from "@/auth";
 import { availableParallelism } from "os";
 import { revalidatePath } from "next/cache";
-import { prisma } from "./../prisma/prisma";
+import { prisma } from "@/prisma/prisma";
 import { join } from "path";
 import { writeFile } from "fs/promises";
 import { permanentRedirect, redirect, RedirectType } from "next/navigation";

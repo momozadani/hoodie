@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import UsersComponent from "@/components/UsersComponent";
+import { prisma } from "@/prisma/prisma";
 const rows = [
   {
     key: "1",
@@ -33,15 +34,16 @@ const columns = [
     label: "NAME",
   },
   {
-    key: "role",
-    label: "ROLE",
+    key: "customerNumber",
+    label: "PERSONAL-NUMMER",
   },
   {
-    key: "status",
-    label: "STATUS",
+    key: "Action",
+    label: "ACTION",
   },
 ];
 
 export default async function UserPage() {
-  return <UsersComponent columns={columns} rows={rows} />;
+  const users = await prisma.user.findMany();
+  return <UsersComponent columns={columns} rows={users} />;
 }

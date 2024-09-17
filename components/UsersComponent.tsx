@@ -12,6 +12,16 @@ import {
 } from "@nextui-org/table";
 import { IoCloudDownloadSharp } from "react-icons/io5";
 import { User, FlattenedUser } from "../types/user";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
+import { FaEllipsisVertical } from "react-icons/fa6";
+import { FaEye } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import Link from "next/link";
 
 interface DataUser {
   users: User[];
@@ -26,10 +36,11 @@ export default function UsersComponent({
     label: string;
   }[];
   rows: {
-    key: string;
-    name: string;
-    role: string;
-    status: string;
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    customerNumber: string;
   }[];
 }) {
   const headers: (keyof FlattenedUser)[] = [
@@ -54,9 +65,8 @@ export default function UsersComponent({
         ...rows.map((row) => headers.map((header) => row[header]).join(",")),
       ].join("\n");
       downloadData("\uFEFF" + csvContent);
-      console.log("this is", csvContent);
     } catch (err) {
-      console.log("i am getting an error", err);
+      console.log(" an error was thrown", err);
     }
   }
 
@@ -93,7 +103,11 @@ export default function UsersComponent({
       >
         export to csv
       </Button>
-      <Table aria-label="Example table with dynamic content">
+      <Table
+        aria-label="Example table with dynamic content"
+        isStriped
+        color="secondary"
+      >
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
@@ -101,10 +115,47 @@ export default function UsersComponent({
         </TableHeader>
         <TableBody items={rows}>
           {(item) => (
-            <TableRow key={item.key}>
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
+            <TableRow key={item.id}>
+              <TableCell>{item.firstName + " " + item.lastName}</TableCell>
+              <TableCell>{item.customerNumber}</TableCell>
+              <TableCell>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly size="sm" variant="light">
+                      <FaEllipsisVertical />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem textValue="View">
+                      <Link
+                        href={"users/" + item.id}
+                        className="flex justify-between items-center"
+                      >
+                        View the User
+                        <FaEye />
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem textValue="Export">
+                      <div className="flex justify-between items-center">
+                        Export the User
+                        <IoCloudDownloadSharp />
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      textValue="Delete User"
+                      onClick={() => console.log("i am getting clicked")}
+                    >
+                      <Link
+                        href={"users/" + item.id}
+                        className="flex justify-between items-center"
+                      >
+                        Delete User
+                        <MdDeleteForever />
+                      </Link>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

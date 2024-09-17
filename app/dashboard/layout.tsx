@@ -15,7 +15,7 @@ export default async function DashboardLayout({
     permanentRedirect("/");
   }
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <SideBar />
       {children}
     </div>

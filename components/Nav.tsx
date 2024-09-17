@@ -17,7 +17,7 @@ export default function Nav({ session }: { session: Session | null }) {
     <Navbar isBordered>
       <NavbarBrand>
         <AcmeLogo />
-        <p className="font-bold text-inherit">Shop</p>
+        <p className="font-bold text-inherit">HoodieHub</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <ActiveRoute path="/">Home</ActiveRoute>
