@@ -171,3 +171,21 @@ export async function uploadHoodieVariantAction(
     return { message: "error" };
   }
 }
+
+export async function deleteUserAction(id: number) {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
+  if (session.user.role === ADMIN) {
+    const deletedUser = await prisma.user.delete({
+      where: {
+        id: id,
+      },
+      include: {
+        orders: true,
+      },
+    });
+    revalidatePath("/dashboard/users");
+  }
+}

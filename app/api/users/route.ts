@@ -4,7 +4,6 @@ import { auth } from "@/auth"; // Referring to the auth.ts we just created
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma";
-import { INTERNALS } from "next/dist/server/web/spec-extension/request";
 
 export const GET = auth(async (req) => {
   if (!req.auth) {

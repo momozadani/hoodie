@@ -56,44 +56,54 @@ const columns = [
 ];
 
 interface OrderType {
-  id: string;
+  id: number;
+  user: {
+    firstName: string;
+    lastName: string;
+  };
   HoodieVariant: {
-    id: number;
-    available: boolean;
-    imagePath: string | null;
-    sizeId: number;
-    colorId: number;
+    Size: {
+      name: string;
+    };
+    Color: {
+      name: string;
+    };
   };
   location: {
-    id: number;
     name: string;
   };
   StickColor: {
-    id: number;
     name: string;
   };
 }
 
 export default function UserTable({ rows }: { rows: OrderType[] }) {
   return (
-    <Table
-      aria-label="Example table with dynamic content"
-      isStriped
-      color="secondary"
-    >
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody items={rows}>
-        {(item) => (
-          <TableRow key={item.id}>
-            <TableCell>{item.id}</TableCell>
-            <TableCell>{item.id}</TableCell>
-            <TableCell>{item.id}</TableCell>
-            <TableCell>{item.id}</TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <h1 className="flex justify-center items-center py-4">
+        Betelllung von {rows[0].user.firstName} {rows[0].user.lastName}
+      </h1>
+      <Table
+        aria-label="Example table with dynamic content"
+        isStriped
+        color="secondary"
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={rows}>
+          {(item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.HoodieVariant.Size.name}</TableCell>
+              <TableCell>{item.HoodieVariant.Color.name}</TableCell>
+              <TableCell>{item.StickColor.name}</TableCell>
+              <TableCell>{item.location.name}</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
   );
 }

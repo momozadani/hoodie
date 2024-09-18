@@ -2,7 +2,6 @@
 
 import { Button } from "@nextui-org/button";
 import {
-  getKeyValue,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +10,8 @@ import {
   TableRow,
 } from "@nextui-org/table";
 import { IoCloudDownloadSharp } from "react-icons/io5";
-import { User, FlattenedUser } from "../types/user";
+import { User, FlattenedUser } from "@/types/user";
+import { deleteUserAction } from "@/app/action";
 import {
   Dropdown,
   DropdownItem,
@@ -26,6 +26,17 @@ import Link from "next/link";
 interface DataUser {
   users: User[];
 }
+
+const headers: (keyof FlattenedUser)[] = [
+  "Vorname",
+  "Nachname",
+  "PersonalNummer",
+  "HoodieFarbe",
+  "HoodieSize",
+  "StickFarbe",
+  "Ort",
+  "email",
+];
 
 export default function UsersComponent({
   columns,
@@ -43,34 +54,36 @@ export default function UsersComponent({
     customerNumber: string;
   }[];
 }) {
-  const headers: (keyof FlattenedUser)[] = [
-    "Vorname",
-    "Nachname",
-    "PersonalNummer",
-    "HoodieFarbe",
-    "HoodieSize",
-    "StickFarbe",
-    "Ort",
-    "email",
-  ];
-  async function handleExport() {
+  async function handleDeleteUser(id: number) {
+    await deleteUserAction(id);
+  }
+  async function handleAllUserExport(): Promise<void> {
     try {
-      const response = await fetch("/api/exportCSV", {
+      const response = await fetch("/api/users", {
         method: "GET",
       });
       const data: DataUser = await response.json();
-      const rows = data.users.flatMap(flattUsers);
-      const csvContent = [
-        headers.join(","),
-        ...rows.map((row) => headers.map((header) => row[header]).join(",")),
-      ].join("\n");
-      downloadData("\uFEFF" + csvContent);
+      const rows: FlattenedUser[] = data.users.flatMap(flatUsers);
+      downloadData(rows, "allUsers");
     } catch (err) {
       console.log(" an error was thrown", err);
     }
   }
+  async function handleExportSelectedUser(id: number) {
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      const data: { user: User } = await response.json();
+      const flatteduser = flatUsers(data.user);
+      downloadData(
+        flatteduser,
+        flatteduser[0].Vorname + "-" + flatteduser[0].Nachname
+      );
+    } catch (e) {
+      console.log("an error occured while fetching a user data", e);
+    }
+  }
 
-  const flattUsers = (user: User) => {
+  function flatUsers(user: User) {
     return user.orders.map((order) => ({
       Vorname: user?.lastName ?? "",
       Nachname: user?.firstName ?? "",
@@ -81,27 +94,31 @@ export default function UsersComponent({
       Ort: order?.location?.name ?? "",
       StickFarbe: order?.StickColor?.name ?? "",
     }));
-  };
+  }
 
-  const downloadData = (data: string) => {
-    const csvData = new Blob([data], { type: "text/csv;charset=utf-8;" });
+  function downloadData(rows: FlattenedUser[], filename: string): void {
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => headers.map((header) => row[header]).join(",")),
+    ].join("\n");
+    const csvData = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const csvURL = URL.createObjectURL(csvData);
     const link = document.createElement("a");
     link.href = csvURL;
-    link.download = "data.csv";
+    link.download = `${filename}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }
   return (
     <div className="w-full flex flex-col pt-10">
       <Button
         startContent={<IoCloudDownloadSharp />}
-        className="w-1/6 self-end"
+        className="w-1/6 self-end mb-1"
         color="success"
-        onClick={handleExport}
+        onClick={handleAllUserExport}
       >
-        export to csv
+        export all orders to csv
       </Button>
       <Table
         aria-label="Example table with dynamic content"
@@ -136,14 +153,17 @@ export default function UsersComponent({
                       </Link>
                     </DropdownItem>
                     <DropdownItem textValue="Export">
-                      <div className="flex justify-between items-center">
-                        Export the user/orders
+                      <div
+                        className="flex justify-between items-center"
+                        onClick={() => handleExportSelectedUser(item.id)}
+                      >
+                        Export the user & order
                         <IoCloudDownloadSharp />
                       </div>
                     </DropdownItem>
                     <DropdownItem
                       textValue="Delete User"
-                      onClick={() => console.log("i am getting clicked")}
+                      onClick={() => handleDeleteUser(item.id)}
                     >
                       <Link
                         href={"users/" + item.id}

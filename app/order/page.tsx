@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { orderHoodieAction } from "../action";
-import { colors, hoodieSize } from "../lib/data";
+import { orderHoodieAction } from "@/app/action";
+import { colors, hoodieSize } from "@/app/lib/data";
 import { Select, SelectItem } from "@nextui-org/select";
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { useFormState } from "react-dom";
