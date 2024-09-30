@@ -1,3 +1,9 @@
-export default function CreateProduct() {
-  return <div>hello</div>;
+import ProductCreateForm from "@/components/ProductForm";
+
+export default async function CreateProduct() {
+  return (
+    <div>
+      <ProductCreateForm />
+    </div>
+  );
 }

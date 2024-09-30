@@ -7,11 +7,7 @@ import { useMemo } from "react";
 export default function Sidebar() {
   const value = usePathname();
   const correctPath = useMemo(() => {
-    return value.includes("product")
-      ? "product"
-      : value.includes("users")
-      ? "users"
-      : "main";
+    return value.includes("users") ? "users" : "product";
   }, [value]);
 
   return (
@@ -23,9 +19,6 @@ export default function Sidebar() {
         selectionMode="single"
         selectedKeys={new Set([correctPath as string])}
       >
-        <ListboxItem key="main" href="/dashboard">
-          Dashboard
-        </ListboxItem>
         <ListboxItem key="users" href="/dashboard/users">
           Users
         </ListboxItem>

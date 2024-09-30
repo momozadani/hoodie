@@ -22,7 +22,7 @@ export default function Nav({ session }: { session: Session | null }) {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <ActiveRoute path="/">Home</ActiveRoute>
         {session?.user.role === "admin" ? (
-          <ActiveRoute path="/dashboard">Dashboard</ActiveRoute>
+          <ActiveRoute path="/dashboard/users">Dashboard</ActiveRoute>
         ) : null}
         <ActiveRoute path="/order">Bestellen</ActiveRoute>
         <ActiveRoute path="/status">Status</ActiveRoute>

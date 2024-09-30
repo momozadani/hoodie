@@ -23,7 +23,6 @@ export default function Order() {
     size: false,
     color: false,
   });
-  console.log("state message", state?.message);
   useEffect(() => {
     if (Array.isArray(state?.message)) {
       const newError = { ...hasError };

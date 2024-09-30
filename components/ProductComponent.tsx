@@ -1,15 +1,30 @@
 "use client";
 
+import { hoodieSize } from "@/app/lib/data";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 
-export default function ProductComponent() {
+type ProductDetails = {
+  size: string;
+  color: string;
+  status: boolean;
+  imagePath: string | null;
+};
+
+export default function ProductComponent({
+  size,
+  color,
+  status,
+  imagePath,
+}: ProductDetails) {
   return (
     <Card className="h-fit border-none">
       <CardHeader className="flex-col items-start">
-        <p className="text-tiny uppercase font-bold">size</p>
-        <small className="text-default-500">color</small>
-        <h4 className="font-bold text-large">status</h4>
+        <p className="text-tiny uppercase font-bold">size: {size}</p>
+        <small className="text-default-500">color: {color}</small>
+        <h4 className="font-bold text-large">
+          status: {status ? "available" : "not available"}
+        </h4>
       </CardHeader>
       <CardBody className="overflow-visible">
         <Image
@@ -17,7 +32,8 @@ export default function ProductComponent() {
           isZoomed
           alt="Card background"
           className="object-cover"
-          src="https://nextui.org/images/hero-card-complete.jpeg"
+          fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
+          src={imagePath || "https://nextui.org/images/hero-card-complete.jpeg"}
           width={200}
           height={200}
         />
