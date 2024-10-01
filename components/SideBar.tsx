@@ -11,7 +11,7 @@ export default function Sidebar() {
   }, [value]);
 
   return (
-    <div className="flex w-1/4">
+    <div className="flex w-1/4 border-r border-divider">
       <Listbox
         aria-label="Listbox Variants"
         color={"primary"}

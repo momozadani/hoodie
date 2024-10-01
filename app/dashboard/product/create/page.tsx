@@ -2,7 +2,7 @@ import ProductCreateForm from "@/components/ProductForm";
 
 export default async function CreateProduct() {
   return (
-    <div>
+    <div className="w-full">
       <ProductCreateForm />
     </div>
   );

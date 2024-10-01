@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { auth, signIn } from "@/auth";
-import { availableParallelism } from "os";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/prisma/prisma";
 import { join } from "path";
@@ -29,7 +28,7 @@ const ACCEPTED_FILE_TYPES = ["image/png", "image/jpg"];
 const hoodieSchema = z.object({
   file: z.instanceof(File).refine((file) => {
     return ACCEPTED_FILE_TYPES.includes(file.type);
-  }, "file must a picture"),
+  }, "file must a picture with png or jpg"),
   size: z.string(),
   color: z.string(),
   available: z.coerce.boolean(),
@@ -46,7 +45,6 @@ export async function orderHoodieAction(
 
   const form = Object.fromEntries(formData!.entries());
   const res = schema.safeParse(form);
-  console.log("this is res", form);
   if (!res.success) {
     return { message: res.error.errors };
   }
@@ -73,7 +71,6 @@ export async function orderHoodieAction(
       name: stickColor,
     },
   });
-  console.log("stickColo", stickColorRecord);
   const hoodieVariantRecord = await prisma.hoodieVariant.findFirst({
     where: {
       colorId: colorRecord?.id,
@@ -109,10 +106,7 @@ export async function signInAction() {
   await signIn();
 }
 
-export async function uploadHoodieVariantAction(
-  prevState: any,
-  formData: FormData | null
-) {
+export async function uploadHoodieVariantAction(formData: FormData | null) {
   const session = await auth();
   if (!session || session?.user.role !== ADMIN) {
     redirect("/");
@@ -120,6 +114,7 @@ export async function uploadHoodieVariantAction(
   if (formData === null) {
     return { message: "form should not be empty" };
   }
+  console.log("logging the hoodie", formData);
   const validation = hoodieSchema.safeParse({
     file: formData?.get("file"),
     color: formData?.get("color"),
