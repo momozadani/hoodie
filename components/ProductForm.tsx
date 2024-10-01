@@ -6,9 +6,9 @@ import { Button } from "@nextui-org/button";
 import { IoCloudUploadOutline } from "react-icons/io5";
 
 type ColorAndSize = {
-    id: number;
-    name: string;
-}
+  id: number;
+  name: string;
+};
 
 export default function ProductCreateForm({
   colors,
@@ -30,8 +30,9 @@ export default function ProductCreateForm({
           type="text"
           name="colors"
           placeholder=" "
+          className="max-h-10"
         />
-        <datalist id="colors">
+        <datalist id="colors" className="overflow-y-auto max-h-6">
           {colors.map((color) => {
             return <option key={color.id}>{color.name}</option>;
           })}

@@ -19,10 +19,7 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    <html
-      lang="en"
-      className="text-black bg-white dark dark:bg-gray-800 dark:text-white"
-    >
+    <html lang="en">
       <body>
         <Providers>
           <Nav session={session} />
