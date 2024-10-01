@@ -80,7 +80,7 @@ interface OrderType {
 export default function UserTable({ rows }: { rows: OrderType[] }) {
   return (
     <>
-      <h1 className="flex justify-center items-center py-4">
+      <h1 className="flex items-center justify-center py-4">
         Betelllung von {rows[0].user.firstName} {rows[0].user.lastName}
       </h1>
       <Table

@@ -18,9 +18,9 @@ export default function ProductComponent({
   imagePath,
 }: ProductDetails) {
   return (
-    <Card className="h-fit border-none">
+    <Card className="border-none h-fit">
       <CardHeader className="flex-col items-start">
-        <p className="text-tiny uppercase font-bold">size: {size}</p>
+        <p className="font-bold uppercase text-tiny">size: {size}</p>
         <small className="text-default-500">color: {color}</small>
         <h4 className="font-bold text-large">
           status: {status ? "available" : "not available"}

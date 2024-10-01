@@ -9,7 +9,6 @@ import { useFormState } from "react-dom";
 import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Checkbox, CheckboxGroup } from "@nextui-org/checkbox";
-import { ZodError } from "zod";
 
 export default function Order() {
   const [isSelected, setIsSelected] = useState(false);
@@ -52,8 +51,8 @@ export default function Order() {
   }
 
   return (
-    <div className="mx-80 min-h-screen flex justify-center">
-      <form className="flex flex-col justify-evenly w-1/2" action={formAction}>
+    <div className="flex justify-center min-h-screen mx-80">
+      <form className="flex flex-col w-1/2 justify-evenly" action={formAction}>
         <div className="flex gap-6">
           <Select
             color="primary"
@@ -66,8 +65,8 @@ export default function Order() {
             onFocus={() => handleFocus("size")}
           >
             {hoodieSize.map((hoodie) => (
-              <SelectItem textValue="hoodie size" key={hoodie}>
-                {hoodie}
+              <SelectItem textValue="hoodie size" key={hoodie.name}>
+                {hoodie.name}
               </SelectItem>
             ))}
           </Select>
@@ -84,7 +83,7 @@ export default function Order() {
             onFocus={() => handleFocus("color")}
           >
             {colors.map((color) => (
-              <SelectItem key={color}>{color}</SelectItem>
+              <SelectItem key={color.code}>{color.name}</SelectItem>
             ))}
           </Select>
         </div>

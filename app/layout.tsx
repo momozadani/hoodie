@@ -21,7 +21,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className="dark dark:bg-gray-800 dark:text-white bg-white text-black"
+      className="text-black bg-white dark dark:bg-gray-800 dark:text-white"
     >
       <body>
         <Providers>

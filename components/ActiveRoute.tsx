@@ -1,7 +1,7 @@
 "use client";
 
 import { NavbarItem } from "@nextui-org/navbar";
-import Link from "next/link";
+import { Link } from "@nextui-org/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
@@ -15,7 +15,10 @@ export default function ActiveRoute({
   const pathname = usePathname();
   return (
     <NavbarItem isActive={pathname === path}>
-      <Link color="foreground" href={`${path}`}>
+      <Link
+        href={`${path}`}
+        color={pathname === path ? "primary" : "foreground"}
+      >
         {children}
       </Link>
     </NavbarItem>

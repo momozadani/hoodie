@@ -39,6 +39,7 @@ model Size {
 model Color {
     id       Int             @id @default(autoincrement())
     name     String          @unique
+    code     String
     variants HoodieVariant[]
 }
 

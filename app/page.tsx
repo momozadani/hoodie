@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main className="flex-col p-24">
-      <h1 className="w-full text-center mb-20">
+      <h1 className="w-full mb-20 text-center">
         Achtung !! Bitte schaut vor eurer Bestellung auf der Mozartseite
       </h1>
       <span className="font-bold">Hoodie Bestellung</span> nach, ob eure

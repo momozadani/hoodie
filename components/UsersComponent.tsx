@@ -111,10 +111,10 @@ export default function UsersComponent({
     document.body.removeChild(link);
   }
   return (
-    <div className="w-full flex flex-col pt-10">
+    <div className="flex flex-col w-full pt-10">
       <Button
         startContent={<IoCloudDownloadSharp />}
-        className="w-1/6 self-end mb-1"
+        className="self-end w-1/6 mb-1"
         color="success"
         onClick={handleAllUserExport}
       >
@@ -146,7 +146,7 @@ export default function UsersComponent({
                     <DropdownItem textValue="View">
                       <Link
                         href={"users/" + item.id}
-                        className="flex justify-between items-center"
+                        className="flex items-center justify-between"
                       >
                         View the orders
                         <FaEye />
@@ -154,7 +154,7 @@ export default function UsersComponent({
                     </DropdownItem>
                     <DropdownItem textValue="Export">
                       <div
-                        className="flex justify-between items-center"
+                        className="flex items-center justify-between"
                         onClick={() => handleExportSelectedUser(item.id)}
                       >
                         Export the user & order
@@ -167,7 +167,7 @@ export default function UsersComponent({
                     >
                       <Link
                         href={"users/" + item.id}
-                        className="flex justify-between items-center"
+                        className="flex items-center justify-between"
                       >
                         Delete the user
                         <MdDeleteForever />

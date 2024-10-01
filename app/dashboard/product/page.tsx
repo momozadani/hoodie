@@ -20,7 +20,7 @@ export default async function ProductPage() {
   });
   return (
     <div className="w-full">
-      <div className="p-3 bg-slate-600 flex justify-center w-full">
+      <div className="flex justify-center w-full p-3 bg-slate-600">
         <Button color="primary">
           <Link href="product/create">create a product</Link>
         </Button>

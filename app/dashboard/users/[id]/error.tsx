@@ -30,9 +30,9 @@ export default function Error({
         className="scale-95 -translate-y-9"
       />
 
-      <div className="flex flex-col w-full justify-center items-center absolute bottom-0 top-0 z-10">
+      <div className="absolute top-0 bottom-0 z-10 flex flex-col items-center justify-center w-full">
         <div
-          className="bg-red-100 border border-red-400 text-red-700  p-3 rounded relative flex justify-center items-center mb-3"
+          className="relative flex items-center justify-center p-3 mb-3 text-red-700 bg-red-100 border border-red-400 rounded"
           role="alert"
         >
           <strong className="font-bold">

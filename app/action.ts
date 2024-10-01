@@ -8,7 +8,6 @@ import { join } from "path";
 import { writeFile } from "fs/promises";
 import { permanentRedirect, redirect, RedirectType } from "next/navigation";
 import { ADMIN } from "./lib/data";
-import { user } from "@nextui-org/theme";
 
 const schema = z.object({
   size: z.string().min(1),
@@ -31,7 +30,6 @@ const hoodieSchema = z.object({
   }, "file must a picture with png or jpg"),
   size: z.string(),
   color: z.string(),
-  available: z.coerce.boolean(),
 });
 
 export async function orderHoodieAction(
@@ -114,18 +112,16 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
   if (formData === null) {
     return { message: "form should not be empty" };
   }
-  console.log("logging the hoodie", formData);
   const validation = hoodieSchema.safeParse({
     file: formData?.get("file"),
     color: formData?.get("color"),
     size: formData?.get("size"),
-    available: formData?.get("available"),
   });
 
   if (!validation.success) {
     return { message: "error in operation" };
   }
-  const { file, color, size, available } = validation.data;
+  const { file, color, size } = validation.data;
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
     const uniqueSuffix = `${new Date(Date.now())}`;
@@ -137,14 +133,14 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
         name: size,
       },
       update: {},
-      create: { name: size },
+      create: { name: size.toUpperCase() },
     });
     const colorRecord = await prisma.color.upsert({
       where: {
         name: color,
       },
       update: {},
-      create: { name: color },
+      create: { name: color.toUpperCase(), code: "" },
     });
     if (sizeRecord === null) {
       return { message: "error size does not exit" };
@@ -152,14 +148,24 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     if (colorRecord === null) {
       return { message: " error color does not exit" };
     }
+    const checkHoodieExistence = await prisma.hoodieVariant.findFirst({
+      where: {
+        sizeId: sizeRecord.id,
+        colorId: colorRecord.id,
+      },
+    });
+    if (checkHoodieExistence !== null) {
+      return { message: "hoodie variation already exits" };
+    }
     await prisma.hoodieVariant.create({
       data: {
         sizeId: sizeRecord.id,
         colorId: colorRecord.id,
-        available: available,
+        available: true,
         imagePath: fileName,
       },
     });
+    revalidatePath("/dashboard/product");
     return { message: "successfull" };
   } catch (e) {
     console.log("an error occured", e);

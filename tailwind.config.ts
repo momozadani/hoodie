@@ -1,12 +1,12 @@
 import type { Config } from "tailwindcss";
-import {nextui} from "@nextui-org/react";
+import { nextui } from "@nextui-org/react";
 
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/components/(avatar|button|card|checkbox|dropdown|image|input|listbox|navbar|radio|select|table|ripple|spinner|menu|divider|popover|scroll-shadow|spacer).js"
+    "./node_modules/@nextui-org/theme/dist/components/(avatar|button|card|checkbox|dropdown|image|input|link|listbox|navbar|radio|select|table|ripple|spinner|menu|divider|popover|scroll-shadow|spacer).js",
   ],
   theme: {
     extend: {
