@@ -9,9 +9,10 @@ import { useFormState } from "react-dom";
 import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Checkbox, CheckboxGroup } from "@nextui-org/checkbox";
+import { Image } from "@nextui-org/image";
 
 export default function Order() {
-  const [isSelected, setIsSelected] = useState(false);
+  const [shippingCost, setShippingCost] = useState("tower");
   const [state, formAction, pending] = useFormState(orderHoodieAction, {
     message: [],
   });
@@ -51,7 +52,7 @@ export default function Order() {
   }
 
   return (
-    <div className="flex justify-center min-h-screen mx-80">
+    <div className="flex justify-center min-h-screen gap-4">
       <form className="flex flex-col w-1/2 justify-evenly" action={formAction}>
         <div className="flex gap-6">
           <Select
@@ -65,7 +66,7 @@ export default function Order() {
             onFocus={() => handleFocus("size")}
           >
             {hoodieSize.map((hoodie) => (
-              <SelectItem textValue="hoodie size" key={hoodie.name}>
+              <SelectItem textValue={hoodie.name} key={hoodie.name}>
                 {hoodie.name}
               </SelectItem>
             ))}
@@ -83,7 +84,19 @@ export default function Order() {
             onFocus={() => handleFocus("color")}
           >
             {colors.map((color) => (
-              <SelectItem key={color.code}>{color.name}</SelectItem>
+              <SelectItem
+                endContent={
+                  <Image
+                    width={20}
+                    height={20}
+                    src={`/colors/${color.code}` + ".png"}
+                    alt={color.name}
+                  />
+                }
+                key={color.code}
+              >
+                {color.name}
+              </SelectItem>
             ))}
           </Select>
         </div>
@@ -101,10 +114,12 @@ export default function Order() {
         </RadioGroup>
 
         <RadioGroup
+          onValueChange={(val) => setShippingCost(val)}
           color="primary"
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
           name="location"
           defaultValue={"tower"}
+          value={shippingCost}
         >
           <Radio required value="tower">
             in den Tower
@@ -116,9 +131,11 @@ export default function Order() {
         </RadioGroup>
 
         <CheckboxGroup
-          label="Ich erkläre mich damit einverstanden, dass die einmalige monatliche
-            Eigenleistung in Höhe von 15,00 Euro + 6,99€ für den Versand, falls
-            zutreffend von meinem Nettoverdienst einbehalten wird"
+          label={`Ich erkläre mich damit einverstanden, dass die einmalige monatliche
+            Eigenleistung in Höhe von 15,00 Euro${
+              shippingCost === "home" ? " + 6,99€ für den Versand" : ""
+            }, falls
+            zutreffend von meinem Nettoverdienst einbehalten wird`}
           errorMessage="please consent"
           isInvalid={hasError.consent}
           onFocus={() => handleFocus("consent")}
@@ -153,6 +170,7 @@ export default function Order() {
           errorMessage="number is too short"
           isInvalid={hasError.customerNumber}
           onFocus={() => handleFocus("customerNumber")}
+          onWheel={(e) => e.currentTarget.blur()}
         />
 
         <Button

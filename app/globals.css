@@ -6,14 +6,20 @@
   .text-balance {
     text-wrap: balance;
   }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    appearance: textfield;
+  }
 }
 * {
   box-sizing: border-box;
 }
-html {
-  margin: 0;
-  height: 100svh;
-}
+
 body {
   height: 100svh;
 }

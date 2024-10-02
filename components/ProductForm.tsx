@@ -1,13 +1,15 @@
 "use client";
 
-import { Input } from "@nextui-org/input";
 import { uploadHoodieVariantAction } from "@/app/action";
 import { Button } from "@nextui-org/button";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+import { Image } from "@nextui-org/image";
 
 type ColorAndSize = {
   id: number;
   name: string;
+  code?: string;
 };
 
 export default function ProductCreateForm({
@@ -18,40 +20,37 @@ export default function ProductCreateForm({
   sizes: ColorAndSize[];
 }) {
   return (
-    <div className="flex items-center justify-center w-full pt-6">
+    <div className="flex flex-col items-center justify-center w-full pt-6 gap-4">
+      <h1>Create a Hoodie </h1>
       <form
         action={uploadHoodieVariantAction}
         className="flex flex-col w-1/4 gap-4"
       >
-        <Input
-          label="Colors"
-          labelPlacement="outside"
-          list="colors"
-          type="text"
-          name="colors"
-          placeholder=" "
-          className="max-h-10"
-        />
-        <datalist id="colors" className="overflow-y-auto max-h-6">
-          {colors.map((color) => {
-            return <option key={color.id}>{color.name}</option>;
-          })}
-        </datalist>
-
-        <Input
-          label="Size"
-          labelPlacement="outside"
-          list="sizes"
-          type="text"
-          name="sizes"
-          placeholder=" "
-        />
-        <datalist id="sizes">
-          {sizes.map((size) => {
-            return <option key={size.id}>{size.name}</option>;
-          })}
-        </datalist>
-
+        <Autocomplete label="Select a color" className="max-w-xs" name="color">
+          {colors.map((color) => (
+            <AutocompleteItem
+              key={color.id}
+              value={color.name}
+              endContent={
+                <Image
+                  src={`/colors/${color.code}.png`}
+                  alt="hello"
+                  width={20}
+                  height={20}
+                />
+              }
+            >
+              {color.name}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
+        <Autocomplete label="Select a size" className="max-w-xs" name="size">
+          {sizes.map((size) => (
+            <AutocompleteItem key={size.id} value={size.name}>
+              {size.name}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
         <div className="flex items-center justify-center ">
           <label
             htmlFor="dropzone-file"
@@ -64,10 +63,15 @@ export default function ProductCreateForm({
                 and drop
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
+                PNG, JPG
               </p>
             </div>
-            <input id="dropzone-file" type="file" className="hidden" />
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              name="file"
+            />
           </label>
         </div>
 

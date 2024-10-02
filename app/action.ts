@@ -25,9 +25,13 @@ const schema = z.object({
 const ACCEPTED_FILE_TYPES = ["image/png", "image/jpg"];
 
 const hoodieSchema = z.object({
-  file: z.instanceof(File).refine((file) => {
-    return ACCEPTED_FILE_TYPES.includes(file.type);
-  }, "file must a picture with png or jpg"),
+  file: z
+    .instanceof(File)
+    .refine((file) => {
+      if (file.name === "undefined") return true;
+      return ACCEPTED_FILE_TYPES.includes(file.type);
+    }, "file must a picture with png or jpg")
+    .optional(),
   size: z.string(),
   color: z.string(),
 });
@@ -123,11 +127,17 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
   }
   const { file, color, size } = validation.data;
   try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const uniqueSuffix = `${new Date(Date.now())}`;
-    const fileName = uniqueSuffix + validation.data.file.name;
-    const uploadDir = join(process.cwd(), "public");
-    await writeFile(`${uploadDir}/${fileName}`, buffer);
+    let fileName = "";
+    if (file) {
+      const buffer = Buffer.from(await file?.arrayBuffer());
+      const uniqueSuffix = `${new Date(Date.now())}`;
+      fileName = uniqueSuffix + validation.data.file?.name;
+      if (buffer) {
+        const uploadDir = join(process.cwd(), "public");
+        await writeFile(`${uploadDir}/${fileName}`, buffer);
+      }
+    }
+
     const sizeRecord = await prisma.size.upsert({
       where: {
         name: size,
@@ -162,7 +172,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
         sizeId: sizeRecord.id,
         colorId: colorRecord.id,
         available: true,
-        imagePath: fileName,
+        imagePath: fileName === "" ? null : fileName,
       },
     });
     revalidatePath("/dashboard/product");
@@ -189,4 +199,23 @@ export async function deleteUserAction(id: number) {
     });
     revalidatePath("/dashboard/users");
   }
+}
+
+export async function changeAvailabilityAction(
+  status: boolean,
+  hoodieId: number
+) {
+  const session = await auth();
+  if (!session || session?.user.role !== ADMIN) {
+    redirect("/");
+  }
+  await prisma.hoodieVariant.update({
+    where: {
+      id: hoodieId,
+    },
+    data: {
+      available: status,
+    },
+  });
+  revalidatePath("/dashboard/product");
 }

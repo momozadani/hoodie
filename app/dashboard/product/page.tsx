@@ -19,16 +19,15 @@ export default async function ProductPage() {
     },
   });
   return (
-    <div className="w-full">
-      <div className="flex justify-center w-full p-3 bg-slate-600">
-        <Button color="primary">
-          <Link href="product/create">create a product</Link>
-        </Button>
-      </div>
+    <div className="w-full flex flex-col">
+      <Button color="primary" className="self-center mt-5">
+        <Link href="product/create">create a product</Link>
+      </Button>
       <div className="flex gap-3">
         {hoodieVar.map((hoodie) => {
           return (
             <ProductComponent
+              hoodieId={hoodie.id}
               key={hoodie.id}
               size={hoodie.Size.name}
               color={hoodie.Color.name}
