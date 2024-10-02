@@ -20,20 +20,28 @@ model User {
 }
 
 model HoodieVariant {
-    id        Int     @id @default(autoincrement())
-    available Boolean @default(true)
+    id        Int                 @id @default(autoincrement())
+    available Boolean             @default(true)
     imagePath String?
     Order     Order[]
-    Size      Size    @relation(fields: [sizeId], references: [id])
-    sizeId    Int
-    Color     Color   @relation(fields: [colorId], references: [id])
     colorId   Int
+    Color     Color               @relation(fields: [colorId], references: [id])
+    sizes     HoodieVariantSize[]
 }
 
 model Size {
-    id       Int             @id @default(autoincrement())
-    name     String          @unique
-    variants HoodieVariant[]
+    id       Int                 @id @default(autoincrement())
+    name     String              @unique
+    variants HoodieVariantSize[]
+}
+
+model HoodieVariantSize {
+    hoodieVariantId Int
+    sizeId          Int
+    HoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id])
+    Size            Size          @relation(fields: [sizeId], references: [id])
+
+    @@id([hoodieVariantId, sizeId])
 }
 
 model Color {

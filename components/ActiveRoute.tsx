@@ -15,10 +15,7 @@ export default function ActiveRoute({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-
-  // Ensure the home page is only activated when pathname is exactly "/"
   const isActive = name === "/" ? pathname === "/" : pathname.includes(name);
-  console.log("pathname", pathname);
   return (
     <NavbarItem isActive={isActive}>
       <Link href={`${path}`} color={isActive ? "primary" : "foreground"}>
