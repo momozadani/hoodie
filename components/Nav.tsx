@@ -21,12 +21,20 @@ export default function Nav({ session }: { session: Session | null }) {
         <p className="font-bold text-inherit">HoodieHub</p>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-        <ActiveRoute path="/">Home</ActiveRoute>
+        <ActiveRoute path="/" name="/">
+          Home
+        </ActiveRoute>
         {session?.user.role === "admin" ? (
-          <ActiveRoute path="/dashboard/users">Dashboard</ActiveRoute>
+          <ActiveRoute path="/dashboard/users" name="dashboard">
+            Dashboard
+          </ActiveRoute>
         ) : null}
-        <ActiveRoute path="/order">Bestellen</ActiveRoute>
-        <ActiveRoute path="/status">Status</ActiveRoute>
+        <ActiveRoute path="/order" name="order">
+          Bestellen
+        </ActiveRoute>
+        <ActiveRoute path="/status" name="status">
+          Status
+        </ActiveRoute>
       </NavbarContent>
       <NavbarContent justify="end">
         {session ? (
