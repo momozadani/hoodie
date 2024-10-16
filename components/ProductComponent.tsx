@@ -16,7 +16,7 @@ import { changeAvailabilityAction } from "@/app/action";
 
 type ProductDetails = {
   hoodieId: number;
-  size: string;
+  sizes: string[];
   color: string;
   status: boolean;
   imagePath: string | null;
@@ -24,7 +24,7 @@ type ProductDetails = {
 
 export default function ProductComponent({
   hoodieId,
-  size,
+  sizes,
   color,
   status,
   imagePath,
@@ -37,10 +37,9 @@ export default function ProductComponent({
 
   return (
     <Card className="border-none h-fit">
-      <div>something</div>
-      <CardHeader className="flex-col items-start gap-3">
-        <p className="font-bold uppercase">size: {size}</p>
-        <p className=" font-bold">color: {color}</p>
+      <CardHeader className="absolute z-10 flex-col items-start gap-3">
+        <p className="font-bold uppercase">size: {sizes.map((size) => size)}</p>
+        <p className="font-bold ">color: {color}</p>
         <Dropdown backdrop="blur">
           <DropdownTrigger>
             <Button
@@ -67,18 +66,14 @@ export default function ProductComponent({
           </DropdownMenu>
         </Dropdown>
       </CardHeader>
-      <CardBody className="overflow-visible">
-        <Image
-          isBlurred
-          isZoomed
-          alt="Card background"
-          className="object-cover"
-          fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
-          src={imagePath || "https://nextui.org/images/hero-card-complete.jpeg"}
-          width={200}
-          height={200}
-        />
-      </CardBody>
+      <Image
+        isBlurred
+        removeWrapper
+        alt="Card background"
+        className="z-0 object-cover w-full h-full"
+        fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
+        src={imagePath || "https://nextui.org/images/hero-card-complete.jpeg"}
+      />
     </Card>
   );
 }

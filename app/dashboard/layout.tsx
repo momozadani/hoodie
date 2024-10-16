@@ -13,7 +13,7 @@ export default async function DashboardLayout({
     permanentRedirect("/");
   }
   return (
-    <div className="flex gap-2 h-[calc(100vh-64.8px)]">
+    <div className="flex gap-2">
       <SideBar />
       {children}
     </div>

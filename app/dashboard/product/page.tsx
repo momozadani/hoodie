@@ -11,31 +11,29 @@ export default async function ProductPage() {
           name: true,
         },
       },
-      sizes : {
-        select : {
-            Size : {
-                select : {
-                    name : true
-                }
-            }
-        }
-      }
+      sizes: {
+        select: {
+          Size: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
-
   });
-  console.log("this is var", hoodieVar);
   return (
-    <div className="w-full flex flex-col">
-      <Button color="primary" className="self-center mt-5">
-        <Link href="product/create">create a product</Link>
+    <div className="flex flex-col w-full">
+      <Button color="primary" className="self-center my-5">
+        <Link href="product/create">create a Hoodie</Link>
       </Button>
-      <div className="flex gap-3">
+      <div className="grid grid-cols-3 gap-2">
         {hoodieVar.map((hoodie) => {
           return (
             <ProductComponent
               hoodieId={hoodie.id}
               key={hoodie.id}
-              size={"XL"}
+              sizes={hoodie.sizes.map((sizeArray) => sizeArray.Size.name)}
               color={hoodie.Color.name}
               status={true}
               imagePath={hoodie.imagePath}
