@@ -67,8 +67,11 @@ export default function OrderFormComponent({
   function handleFocus(field: string) {
     setHasError((prevError) => ({ ...prevError, [field]: false }));
   }
-  function handleColorSelect(color: string) {
-    
+  function handleColorSelect(color: string | undefined) {
+    console.log("checking type", color);
+    const sizesOfColor = hoodieVariants.filter((variant) => {
+      return variant.Color.name === color;
+    });
   }
 
   return (
@@ -85,7 +88,7 @@ export default function OrderFormComponent({
             errorMessage="please select a color"
             isInvalid={hasError.color}
             onFocus={() => handleFocus("color")}
-            onSelectionChange={(val) => handleColorSelect(val) }
+            onSelectionChange={(val) => handleColorSelect(val.currentKey)}
           >
             {colorList.map((color) => (
               <SelectItem
