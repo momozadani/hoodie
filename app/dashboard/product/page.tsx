@@ -23,6 +23,7 @@ export default async function ProductPage() {
     },
 
   });
+  console.log("this is var", hoodieVar);
   return (
     <div className="w-full flex flex-col">
       <Button color="primary" className="self-center mt-5">
@@ -36,7 +37,7 @@ export default async function ProductPage() {
               key={hoodie.id}
               size={"XL"}
               color={hoodie.Color.name}
-              status={hoodie.available}
+              status={true}
               imagePath={hoodie.imagePath}
             />
           );

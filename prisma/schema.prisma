@@ -21,7 +21,6 @@ model User {
 
 model HoodieVariant {
     id        Int                 @id @default(autoincrement())
-    available Boolean             @default(true)
     imagePath String?
     Order     Order[]
     colorId   Int
