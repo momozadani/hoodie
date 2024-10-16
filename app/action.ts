@@ -76,7 +76,7 @@ export async function orderHoodieAction(
   const hoodieVariantRecord = await prisma.hoodieVariant.findFirst({
     where: {
       colorId: colorRecord?.id,
-      sizeId: sizeRecord?.id,
+     // sizeId: sizeRecord?.id,
     },
   });
   const userSession = session.user!;
@@ -160,7 +160,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     }
     const checkHoodieExistence = await prisma.hoodieVariant.findFirst({
       where: {
-        sizeId: sizeRecord.id,
+       // sizeId: sizeRecord.id,
         colorId: colorRecord.id,
       },
     });
@@ -169,7 +169,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     }
     await prisma.hoodieVariant.create({
       data: {
-        sizeId: sizeRecord.id,
+      //  sizeId: sizeRecord.id,
         colorId: colorRecord.id,
         available: true,
         imagePath: fileName === "" ? null : fileName,

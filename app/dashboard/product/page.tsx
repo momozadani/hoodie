@@ -6,17 +6,22 @@ import { prisma } from "@/prisma/prisma";
 export default async function ProductPage() {
   const hoodieVar = await prisma.hoodieVariant.findMany({
     include: {
-      Size: {
-        select: {
-          name: true,
-        },
-      },
       Color: {
         select: {
           name: true,
         },
       },
+      sizes : {
+        select : {
+            Size : {
+                select : {
+                    name : true
+                }
+            }
+        }
+      }
     },
+
   });
   return (
     <div className="w-full flex flex-col">
@@ -29,7 +34,7 @@ export default async function ProductPage() {
             <ProductComponent
               hoodieId={hoodie.id}
               key={hoodie.id}
-              size={hoodie.Size.name}
+              size={"XL"}
               color={hoodie.Color.name}
               status={hoodie.available}
               imagePath={hoodie.imagePath}

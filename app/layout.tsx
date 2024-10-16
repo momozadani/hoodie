@@ -5,7 +5,6 @@ import { Providers } from "./providers";
 import Nav from "@/components/Nav";
 import { auth } from "@/auth";
 
-export const dynamic = "force-dynamic";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "HoodieHub",
