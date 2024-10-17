@@ -2,7 +2,7 @@
 
 import { Button } from "@nextui-org/button";
 import { orderHoodieAction } from "@/app/action";
-import { colors, hoodieSize } from "@/app/lib/data";
+import { hoodieSize } from "@/app/lib/data";
 import { Select, SelectItem } from "@nextui-org/select";
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { useFormState } from "react-dom";
@@ -76,9 +76,7 @@ export default function OrderFormComponent({
     setHasError((prevError) => ({ ...prevError, [field]: false }));
   }
   function handleColorSelect(color: string | undefined) {
-    console.log("color", color);
     if (color === undefined) {
-      console.log("changed size", selectedColor);
       setSelectedColor(new Set<string>([""]));
       setSizeList(hoodieSize.map((s) => s.name));
       return;
@@ -96,14 +94,18 @@ export default function OrderFormComponent({
     }
   }
 
-  function handleSizeSelect(size: string): void {
+  function handleSizeSelect(size: string | undefined): void {
     if (size !== undefined) {
       const newColorList = hoodieVariants.filter((variant) => {
         return variant.sizes.some((val) => val.Size.name === size);
       });
       setColorList(newColorList.map((c) => c.Color));
       setSelectedSize(new Set<string>([size]));
-      console.log("this is colorList", newColorList, size);
+    } else {
+      setSelectedSize(new Set<string>([""]));
+      setColorList(
+        hoodieVariants.map((initialColorList) => initialColorList.Color)
+      );
     }
   }
 
@@ -149,7 +151,7 @@ export default function OrderFormComponent({
             errorMessage="please select a size"
             isInvalid={hasError.size}
             selectedKeys={selectedSize}
-            onSelectionChange={(val) => handleSizeSelect(val.currentKey ?? "")}
+            onSelectionChange={(val) => handleSizeSelect(val.currentKey)}
             onFocus={() => handleFocus("size")}
           >
             {sizeList.map((size) => (
