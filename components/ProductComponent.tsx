@@ -1,8 +1,7 @@
 "use client";
 
-import { hoodieSize } from "@/app/lib/data";
 import { Button } from "@nextui-org/button";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import { Card, CardHeader } from "@nextui-org/card";
 import {
   Dropdown,
   DropdownItem,
@@ -13,6 +12,9 @@ import { Image } from "@nextui-org/image";
 import { HiMiniXMark } from "react-icons/hi2";
 import { IoMdCheckmark } from "react-icons/io";
 import { changeAvailabilityAction } from "@/app/action";
+import { Select, SelectItem } from "@nextui-org/select";
+import { hoodieSize } from "@/app/lib/data";
+import { SharedSelection } from "@nextui-org/system";
 
 type ProductDetails = {
   hoodieId: number;
@@ -29,42 +31,37 @@ export default function ProductComponent({
   status,
   imagePath,
 }: ProductDetails) {
-  async function handleAvailability(state: boolean): Promise<void> {
-    if (state !== status) {
-      await changeAvailabilityAction(state, hoodieId);
+  async function handleSelectionChange(
+    sizeSet: SharedSelection
+  ): Promise<void> {
+    const resultSet: string[] = [];
+    if (sizeSet !== "all") {
+      sizeSet.forEach((size) => resultSet.add(size as string));
     }
+    console.log(resultSet);
+
+    // await changeAvailabilityAction(state, hoodieId);
   }
 
   return (
     <Card className="border-none h-fit">
       <CardHeader className="absolute z-10 flex-col items-start gap-3">
-        <p className="font-bold uppercase">size: {sizes.map((size) => size)}</p>
-        <p className="font-bold ">color: {color}</p>
-        <Dropdown backdrop="blur">
-          <DropdownTrigger>
-            <Button
-              variant="ghost"
-              endContent={status ? <IoMdCheckmark /> : <HiMiniXMark />}
-              radius="sm"
-            >
-              change status: {status ? "available" : "unavailable"}
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu variant="faded" aria-label="Static Actions">
-            <DropdownItem
-              onClick={() => handleAvailability(true)}
-              key="available"
-            >
-              available
-            </DropdownItem>
-            <DropdownItem
-              onClick={() => handleAvailability(false)}
-              key="unavailable"
-            >
-              unavailable
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <Select
+          classNames={{
+            //mainWrapper: "bg-transparent",
+            base: "border",
+            trigger: "bg-transparent  data-[hover=true]:bg-transparent",
+          }}
+          label="Edit the available size"
+          selectionMode="multiple"
+          defaultSelectedKeys={new Set<string>([...sizes])}
+          onSelectionChange={(sizes) => handleSelectionChange(sizes)}
+        >
+          {hoodieSize.map((size) => {
+            return <SelectItem key={size.name}>{size.name}</SelectItem>;
+          })}
+        </Select>
+        <p className="font-bold ">Color: {color}</p>
       </CardHeader>
       <Image
         isBlurred
@@ -72,7 +69,7 @@ export default function ProductComponent({
         alt="Card background"
         className="z-0 object-cover w-full h-full"
         fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
-        src={imagePath || "https://nextui.org/images/hero-card-complete.jpeg"}
+        src={imagePath ?? "https://nextui.org/images/hero-card-complete.jpeg"}
       />
     </Card>
   );
