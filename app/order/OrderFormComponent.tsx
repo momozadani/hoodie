@@ -19,6 +19,7 @@ type HoodieVarType = {
   }[];
   Color: {
     name: string;
+    code: string;
   };
 }[];
 
@@ -31,8 +32,15 @@ export default function OrderFormComponent({
   const [state, formAction, pending] = useFormState(orderHoodieAction, {
     message: [],
   });
-  const [colorList, setColorList] = useState(colors);
-  const [sizeList, setSizeList] = useState(hoodieSize);
+  const [colorList, setColorList] = useState(
+    hoodieVariants.map((initialColorList) => initialColorList.Color)
+  );
+  const [sizeList, setSizeList] = useState(hoodieSize.map((s) => s.name));
+
+  // for handling the case when the size does not exists in the color when size already selected
+  const [selectedSize, setSelectedSize] = useState(new Set<string>([""]));
+  const [selectedColor, setSelectedColor] = useState(new Set<string>([""]));
+
   const [hasError, setHasError] = useState({
     stickColor: false,
     consent: false,
@@ -68,10 +76,35 @@ export default function OrderFormComponent({
     setHasError((prevError) => ({ ...prevError, [field]: false }));
   }
   function handleColorSelect(color: string | undefined) {
-    console.log("checking type", color);
-    const sizesOfColor = hoodieVariants.filter((variant) => {
-      return variant.Color.name === color;
-    });
+    console.log("color", color);
+    if (color === undefined) {
+      console.log("changed size", selectedColor);
+      setSelectedColor(new Set<string>([""]));
+      setSizeList(hoodieSize.map((s) => s.name));
+      return;
+    }
+    setSelectedColor(new Set<string>([color]));
+    const colorSizes = hoodieVariants
+      .filter((variant) => {
+        return variant.Color.name === color;
+      })
+      .flatMap((variant) => variant.sizes.map((size) => size.Size.name));
+    setSizeList(colorSizes);
+    const checkSizePredi = (size: string) => selectedSize.has(size);
+    if (!colorSizes.some(checkSizePredi)) {
+      setSelectedSize(new Set<string>([""]));
+    }
+  }
+
+  function handleSizeSelect(size: string): void {
+    if (size !== undefined) {
+      const newColorList = hoodieVariants.filter((variant) => {
+        return variant.sizes.some((val) => val.Size.name === size);
+      });
+      setColorList(newColorList.map((c) => c.Color));
+      setSelectedSize(new Set<string>([size]));
+      console.log("this is colorList", newColorList, size);
+    }
   }
 
   return (
@@ -88,6 +121,7 @@ export default function OrderFormComponent({
             errorMessage="please select a color"
             isInvalid={hasError.color}
             onFocus={() => handleFocus("color")}
+            selectedKeys={selectedColor}
             onSelectionChange={(val) => handleColorSelect(val.currentKey)}
           >
             {colorList.map((color) => (
@@ -114,11 +148,13 @@ export default function OrderFormComponent({
             className="max-w-xs"
             errorMessage="please select a size"
             isInvalid={hasError.size}
+            selectedKeys={selectedSize}
+            onSelectionChange={(val) => handleSizeSelect(val.currentKey ?? "")}
             onFocus={() => handleFocus("size")}
           >
-            {sizeList.map((hoodie) => (
-              <SelectItem textValue={hoodie.name} key={hoodie.name}>
-                {hoodie.name}
+            {sizeList.map((size) => (
+              <SelectItem textValue={size} key={size}>
+                {size}
               </SelectItem>
             ))}
           </Select>

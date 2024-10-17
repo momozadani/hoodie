@@ -7,6 +7,7 @@ export default async function Order() {
       Color: {
         select: {
           name: true,
+          code: true,
         },
       },
       sizes: {
@@ -20,5 +21,5 @@ export default async function Order() {
       },
     },
   });
-  return <OrderFormComponent hoodieVariants ={hoodieVariants} />;
+  return <OrderFormComponent hoodieVariants={hoodieVariants} />;
 }
