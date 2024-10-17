@@ -21,5 +21,11 @@ export default async function Order() {
       },
     },
   });
-  return <OrderFormComponent hoodieVariants={hoodieVariants} />;
+  return (
+    <OrderFormComponent
+      hoodieVariants={hoodieVariants.filter(
+        (variant) => variant.sizes.length > 0
+      )}
+    />
+  );
 }

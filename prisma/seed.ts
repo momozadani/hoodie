@@ -9,7 +9,14 @@ async function main() {
   await prisma.size.deleteMany({});
   await prisma.hoodieVariant.deleteMany({});
   await prisma.hoodieVariantSize.deleteMany({});
-
+  await prisma.location.deleteMany({});
+  await prisma.stickColor.deleteMany({});
+  await prisma.stickColor.createMany({
+    data: [{ name: "schwarz" }, { name: "weiß" }],
+  });
+  await prisma.location.createMany({
+    data: [{ name: "tower" }, { name: "home" }],
+  });
   await prisma.color.createMany({
     data: colors,
   });
@@ -18,13 +25,13 @@ async function main() {
   });
   const allColors = await prisma.color.findMany();
   const allSizes = await prisma.size.findMany();
-  const createHoodie = allColors.map(color=> ({
-    colorId: color.id
-  }))
+  const createHoodie = allColors.map((color) => ({
+    colorId: color.id,
+  }));
   await prisma.hoodieVariant.createMany({
-    data: createHoodie
-  })
-  const allHoodieVariants = await prisma.hoodieVariant.findMany()
+    data: createHoodie,
+  });
+  const allHoodieVariants = await prisma.hoodieVariant.findMany();
   const allHoodieVariantSize = allHoodieVariants.flatMap((hoodieVar) =>
     allSizes.map((size) => ({
       hoodieVariantId: hoodieVar.id,

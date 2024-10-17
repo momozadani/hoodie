@@ -20,18 +20,18 @@ model User {
 }
 
 model HoodieVariant {
-    id        Int                 @id @default(autoincrement())
-    imagePath String?
-    Order     Order[]
-    colorId   Int
-    Color     Color               @relation(fields: [colorId], references: [id])
-    sizes     HoodieVariantSize[]
+    id                Int                 @id @default(autoincrement())
+    imagePath         String?
+    Order             Order[]
+    colorId           Int
+    Color             Color               @relation(fields: [colorId], references: [id])
+    hoodieVariantSize HoodieVariantSize[]
 }
 
 model Size {
-    id       Int                 @id @default(autoincrement())
-    name     String              @unique
-    variants HoodieVariantSize[]
+    id                Int                 @id @default(autoincrement())
+    name              String              @unique
+    hoodieVariantSize HoodieVariantSize[]
 }
 
 model HoodieVariantSize {
@@ -39,6 +39,7 @@ model HoodieVariantSize {
     sizeId          Int
     HoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id])
     Size            Size          @relation(fields: [sizeId], references: [id])
+    Order           Order[]
 
     @@id([hoodieVariantId, sizeId])
 }
@@ -51,17 +52,19 @@ model Color {
 }
 
 model Order {
-    id              Int           @id @default(autoincrement())
-    user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId          Int
-    HoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id])
-    hoodieVariantId Int
-    quantity        Int
-    location        Location      @relation(fields: [locationId], references: [id])
-    locationId      Int
-    createdAt       DateTime      @default(now())
-    StickColor      StickColor    @relation(fields: [stickColorId], references: [id])
-    stickColorId    Int
+    id                Int               @id @default(autoincrement())
+    user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId            Int
+    hoodieVariantSize HoodieVariantSize @relation(fields: [hoodieVariantId, sizeId], references: [hoodieVariantId, sizeId])
+    hoodieVariantId   Int
+    sizeId            Int
+    quantity          Int
+    location          Location          @relation(fields: [locationId], references: [id])
+    locationId        Int
+    createdAt         DateTime          @default(now())
+    StickColor        StickColor        @relation(fields: [stickColorId], references: [id])
+    stickColorId      Int
+    HoodieVariant     HoodieVariant     @relation(fields: [hoodieVariantId], references: [id])
 }
 
 model StickColor {

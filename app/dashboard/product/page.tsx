@@ -35,7 +35,6 @@ export default async function ProductPage() {
               key={hoodie.id}
               sizes={hoodie.sizes.map((sizeArray) => sizeArray.Size.name)}
               color={hoodie.Color.name}
-              status={true}
               imagePath={hoodie.imagePath}
             />
           );

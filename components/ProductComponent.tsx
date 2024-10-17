@@ -20,7 +20,6 @@ type ProductDetails = {
   hoodieId: number;
   sizes: string[];
   color: string;
-  status: boolean;
   imagePath: string | null;
 };
 
@@ -28,19 +27,16 @@ export default function ProductComponent({
   hoodieId,
   sizes,
   color,
-  status,
   imagePath,
 }: ProductDetails) {
   async function handleSelectionChange(
     sizeSet: SharedSelection
   ): Promise<void> {
-    const resultSet: string[] = [];
+    const sizeList: string[] = [];
     if (sizeSet !== "all") {
-      sizeSet.forEach((size) => resultSet.add(size as string));
+      sizeSet.forEach((size) => sizeList.push(size as string));
     }
-    console.log(resultSet);
-
-    // await changeAvailabilityAction(state, hoodieId);
+    await changeAvailabilityAction(sizeList, hoodieId);
   }
 
   return (
@@ -61,13 +57,13 @@ export default function ProductComponent({
             return <SelectItem key={size.name}>{size.name}</SelectItem>;
           })}
         </Select>
-        <p className="font-bold ">Color: {color}</p>
+        <h1 className="font-bold">Color: {color}</h1>
       </CardHeader>
       <Image
         isBlurred
         removeWrapper
         alt="Card background"
-        className="z-0 object-cover w-full h-full"
+        className="z-0 object-cover w-full h-full "
         fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
         src={imagePath ?? "https://nextui.org/images/hero-card-complete.jpeg"}
       />

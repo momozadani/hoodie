@@ -44,9 +44,10 @@ export async function orderHoodieAction(
   if (!session) {
     redirect("/");
   }
-
+  console.log("formData", formData);
   const form = Object.fromEntries(formData!.entries());
   const res = schema.safeParse(form);
+  console.log("form", res);
   if (!res.success) {
     return { message: res.error.errors };
   }
@@ -76,7 +77,7 @@ export async function orderHoodieAction(
   const hoodieVariantRecord = await prisma.hoodieVariant.findFirst({
     where: {
       colorId: colorRecord?.id,
-     // sizeId: sizeRecord?.id,
+      // sizeId: sizeRecord?.id,
     },
   });
   const userSession = session.user!;
@@ -160,7 +161,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     }
     const checkHoodieExistence = await prisma.hoodieVariant.findFirst({
       where: {
-       // sizeId: sizeRecord.id,
+        // sizeId: sizeRecord.id,
         colorId: colorRecord.id,
       },
     });
@@ -169,7 +170,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     }
     await prisma.hoodieVariant.create({
       data: {
-      //  sizeId: sizeRecord.id,
+        //  sizeId: sizeRecord.id,
         colorId: colorRecord.id,
         available: true,
         imagePath: fileName === "" ? null : fileName,
@@ -202,20 +203,34 @@ export async function deleteUserAction(id: number) {
 }
 
 export async function changeAvailabilityAction(
-  status: boolean,
+  sizeName: string[],
   hoodieId: number
 ) {
   const session = await auth();
   if (!session || session?.user.role !== ADMIN) {
     redirect("/");
   }
-  await prisma.hoodieVariant.update({
-    where: {
-      id: hoodieId,
-    },
-    data: {
-      available: status,
-    },
+  const sizeIds = await prisma.size
+    .findMany({
+      where: {
+        name: {
+          in: sizeName,
+        },
+      },
+    })
+    .then((val) => val.map((s) => s.id));
+
+  await prisma.hoodieVariantSize.deleteMany({
+    where: { hoodieVariantId: hoodieId },
   });
+  await prisma.hoodieVariantSize.createMany({
+    data: sizeIds.map((size) => {
+      return {
+        hoodieVariantId: hoodieId,
+        sizeId: size,
+      };
+    }),
+  });
+
   revalidatePath("/dashboard/product");
 }
