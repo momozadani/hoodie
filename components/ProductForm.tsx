@@ -26,7 +26,12 @@ export default function ProductCreateForm({
         action={uploadHoodieVariantAction}
         className="flex flex-col w-1/4 gap-4"
       >
-        <Autocomplete label="Select a color" className="max-w-xs" name="color">
+        <Autocomplete
+          allowsCustomValue
+          label="Select a  custom color"
+          className="max-w-xs"
+          name="color"
+        >
           {colors.map((color) => (
             <AutocompleteItem
               key={color.id}
@@ -44,7 +49,12 @@ export default function ProductCreateForm({
             </AutocompleteItem>
           ))}
         </Autocomplete>
-        <Autocomplete label="Select a size" className="max-w-xs" name="size">
+        <Autocomplete
+          allowsCustomValue
+          label="Select a size"
+          className="max-w-xs"
+          name="size"
+        >
           {sizes.map((size) => (
             <AutocompleteItem key={size.id} value={size.name}>
               {size.name}

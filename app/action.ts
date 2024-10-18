@@ -115,7 +115,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     redirect("/");
   }
   if (formData === null) {
-    return { message: "form should not be empty" };
+    throw new Error("form should not be empty");
   }
   const validation = hoodieSchema.safeParse({
     file: formData?.get("file"),
@@ -124,16 +124,15 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
   });
 
   if (!validation.success) {
-    return { message: "error in operation" };
+    throw new Error("error in validation operation");
   }
   const { file, color, size } = validation.data;
   try {
     let fileName = "";
-    if (file) {
-      const buffer = Buffer.from(await file?.arrayBuffer());
-      const uniqueSuffix = `${new Date(Date.now())}`;
-      fileName = uniqueSuffix + validation.data.file?.name;
+    if (file && file?.name) {
+      const buffer = Buffer.from(await file.arrayBuffer());
       if (buffer) {
+        fileName = file.name;
         const uploadDir = join(process.cwd(), "public");
         await writeFile(`${uploadDir}/${fileName}`, buffer);
       }
@@ -153,35 +152,32 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
       update: {},
       create: { name: color.toUpperCase(), code: "" },
     });
-    if (sizeRecord === null) {
-      return { message: "error size does not exit" };
-    }
-    if (colorRecord === null) {
-      return { message: " error color does not exit" };
-    }
+
     const checkHoodieExistence = await prisma.hoodieVariant.findFirst({
       where: {
-        // sizeId: sizeRecord.id,
         colorId: colorRecord.id,
       },
     });
     if (checkHoodieExistence !== null) {
-      return { message: "hoodie variation already exits" };
+      throw new Error("hoodie variation already exits");
     }
-    await prisma.hoodieVariant.create({
+    const hoodieVariant = await prisma.hoodieVariant.create({
       data: {
-        //  sizeId: sizeRecord.id,
         colorId: colorRecord.id,
-        available: true,
         imagePath: fileName === "" ? null : fileName,
       },
     });
-    revalidatePath("/dashboard/product");
-    return { message: "successfull" };
+    await prisma.hoodieVariantSize.create({
+      data: {
+        hoodieVariantId: hoodieVariant.id,
+        sizeId: sizeRecord.id,
+      },
+    });
   } catch (e) {
     console.log("an error occured", e);
-    return { message: "error" };
   }
+  revalidatePath("/dashboard/product");
+  redirect("/dashboard");
 }
 
 export async function deleteUserAction(id: number) {

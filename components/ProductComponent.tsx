@@ -43,11 +43,8 @@ export default function ProductComponent({
     <Card className="border-none h-fit">
       <CardHeader className="absolute z-10 flex-col items-start gap-3">
         <Select
-          classNames={{
-            //mainWrapper: "bg-transparent",
-            base: "border",
-            trigger: "bg-transparent  data-[hover=true]:bg-transparent",
-          }}
+          variant="bordered"
+          color="primary"
           label="Edit the available size"
           selectionMode="multiple"
           defaultSelectedKeys={new Set<string>([...sizes])}
