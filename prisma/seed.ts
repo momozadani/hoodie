@@ -12,7 +12,7 @@ async function main() {
   await prisma.location.deleteMany({});
   await prisma.stickColor.deleteMany({});
   await prisma.stickColor.createMany({
-    data: [{ name: "schwarz" }, { name: "weiß" }],
+    data: [{ name: "black" }, { name: "white" }],
   });
   await prisma.location.createMany({
     data: [{ name: "tower" }, { name: "home" }],

@@ -32,7 +32,6 @@ export default function OrderFormComponent({
   const [state, formAction, pending] = useFormState(orderHoodieAction, {
     message: [],
   });
-  console.log("zod is here", state);
   const [colorList, setColorList] = useState(
     hoodieVariants.map((initialColorList) => initialColorList.Color)
   );
@@ -49,6 +48,8 @@ export default function OrderFormComponent({
     size: false,
     color: false,
   });
+  //  this useEffect could be removed prob.
+  //  just do not use the hasError ? kein Bock
   useEffect(() => {
     if (Array.isArray(state?.message)) {
       const newError = { ...hasError };
