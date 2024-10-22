@@ -23,9 +23,31 @@ import { FaEye } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Link from "next/link";
 
-interface DataUser {
-  users: User[];
-}
+type UserAndOrder = {
+  orders: {
+    location: {
+      name: string;
+    };
+    StickColor: {
+      name: string;
+    };
+    hoodieVariantSize: {
+      Size: {
+        name: string;
+      };
+    };
+    HoodieVariant: {
+      Color: {
+        name: string;
+      };
+    };
+  }[];
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  customerNumber: string;
+};
 
 const headers: (keyof FlattenedUser)[] = [
   "Vorname",
@@ -40,60 +62,62 @@ const headers: (keyof FlattenedUser)[] = [
 
 export default function UsersComponent({
   columns,
-  rows,
+  usersAndOrder,
 }: {
   columns: {
     key: string;
     label: string;
   }[];
-  rows: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    customerNumber: string;
-  }[];
+  usersAndOrder: UserAndOrder[];
 }) {
   async function handleDeleteUser(id: number) {
     await deleteUserAction(id);
   }
-  async function handleAllUserExport(): Promise<void> {
-    try {
-      const response = await fetch("/api/users", {
-        method: "GET",
+  function handleAllUserExport(): void {
+    const rows = usersAndOrder.flatMap((user) => {
+      return user.orders.map((order) => {
+        return {
+          email: user.email,
+          Vorname: user.firstName,
+          Nachname: user.lastName,
+          PersonalNummer: user.customerNumber,
+          HoodieFarbe: order.HoodieVariant.Color.name,
+          HoodieSize: order.hoodieVariantSize.Size.name,
+          StickFarbe: order.StickColor.name,
+          Ort: order.location.name,
+        };
       });
-      const data: DataUser = await response.json();
-      const rows: FlattenedUser[] = data.users.flatMap(flatUsers);
-      downloadData(rows, "allUsers");
-    } catch (err) {
-      console.log(" an error was thrown", err);
-    }
+    });
+    downloadData(rows, "All-users");
   }
-  async function handleExportSelectedUser(id: number) {
-    try {
-      const response = await fetch(`/api/users/${id}`);
-      const data: { user: User } = await response.json();
-      const flatteduser = flatUsers(data.user);
-      downloadData(
-        flatteduser,
-        flatteduser[0].Vorname + "-" + flatteduser[0].Nachname
-      );
-    } catch (e) {
-      console.log("an error occured while fetching a user data", e);
-    }
-  }
-
-  function flatUsers(user: User) {
-    return user.orders.map((order) => ({
-      Vorname: user?.lastName ?? "",
-      Nachname: user?.firstName ?? "",
-      email: user?.email ?? "",
-      PersonalNummer: user?.customerNumber ?? "",
-      HoodieFarbe: order?.HoodieVariant?.Color?.name ?? "",
-      HoodieSize: order?.HoodieVariant?.Size?.name ?? "",
-      Ort: order?.location?.name ?? "",
-      StickFarbe: order?.StickColor?.name ?? "",
-    }));
+  const rows = usersAndOrder.map(
+    ({ customerNumber, id, email, firstName, lastName }) => ({
+      id,
+      customerNumber,
+      email,
+      firstName,
+      lastName,
+    })
+  );
+  function handleExportSelectedUser(id: number) {
+    const user = usersAndOrder.filter((user) => {
+      user.id === id;
+    });
+    const rows = user.flatMap((user) => {
+      return user.orders.map((order) => {
+        return {
+          email: user.email,
+          Vorname: user.firstName,
+          Nachname: user.lastName,
+          PersonalNummer: user.customerNumber,
+          HoodieFarbe: order.HoodieVariant.Color.name,
+          HoodieSize: order.hoodieVariantSize.Size.name,
+          StickFarbe: order.StickColor.name,
+          Ort: order.location.name,
+        };
+      });
+    });
+    downloadData(rows, "one-user");
   }
 
   function downloadData(rows: FlattenedUser[], filename: string): void {

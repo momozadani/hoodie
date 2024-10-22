@@ -18,10 +18,29 @@ const columns = [
 ];
 
 export default async function UserPage() {
-  const users = await prisma.user.findMany({
+  const usersAndOrder = await prisma.user.findMany({
     include: {
       orders: {
         select: {
+          StickColor: {
+            select: {
+              name: true,
+            },
+          },
+          location: {
+            select: {
+              name: true,
+            },
+          },
+          hoodieVariantSize: {
+            select: {
+              Size: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
           HoodieVariant: {
             select: {
               Color: {
@@ -35,5 +54,6 @@ export default async function UserPage() {
       },
     },
   });
-  return <UsersComponent columns={columns} rows={users} />;
+
+  return <UsersComponent columns={columns} usersAndOrder={usersAndOrder} />;
 }
