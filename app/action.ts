@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/prisma/prisma";
 import { join } from "path";
 import { writeFile } from "fs/promises";
-import { permanentRedirect, redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 import { ADMIN } from "./lib/data";
 
 const schema = z.object({
@@ -32,8 +32,8 @@ const hoodieSchema = z.object({
       return ACCEPTED_FILE_TYPES.includes(file.type);
     }, "file must a picture with png or jpg")
     .optional(),
-  size: z.string(),
-  color: z.string(),
+  size: z.string().min(1),
+  color: z.string().min(1),
 });
 
 export async function orderHoodieAction(
@@ -44,10 +44,8 @@ export async function orderHoodieAction(
   if (!session) {
     redirect("/");
   }
-  console.log("formData", formData);
   const form = Object.fromEntries(formData!.entries());
   const res = schema.safeParse(form);
-  console.log("form", res);
   if (!res.success) {
     return { message: res.error.errors };
   }
@@ -77,10 +75,10 @@ export async function orderHoodieAction(
   const hoodieVariantRecord = await prisma.hoodieVariant.findFirst({
     where: {
       colorId: colorRecord?.id,
-      // sizeId: sizeRecord?.id,
     },
   });
-  const userSession = session.user!;
+  const userSession = session.user;
+  // wer are asserting here because no way this gets called without users since it is intern
   const name = userSession.name?.split(" ")!;
   const userRecord = await prisma.user.upsert({
     where: {
@@ -94,15 +92,24 @@ export async function orderHoodieAction(
       customerNumber: customerNumber,
     },
   });
-  const orderRecord = await prisma.order.create({
-    data: {
-      hoodieVariantId: hoodieVariantRecord!.id,
-      userId: userRecord.id,
-      locationId: locationRecord!.id,
-      stickColorId: stickColorRecord!.id,
-      quantity: 1,
-    },
-  });
+  if (
+    hoodieVariantRecord &&
+    userRecord &&
+    locationRecord &&
+    stickColorRecord &&
+    sizeRecord
+  ) {
+    await prisma.order.create({
+      data: {
+        hoodieVariantId: hoodieVariantRecord.id,
+        userId: userRecord.id,
+        locationId: locationRecord.id,
+        stickColorId: stickColorRecord.id,
+        quantity: 1,
+        sizeId: sizeRecord.id,
+      },
+    });
+  }
 }
 
 export async function signInAction() {
@@ -124,10 +131,12 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
   });
 
   if (!validation.success) {
-    throw new Error("error in validation operation");
+    throw new Error(`${validation.error}`);
   }
   const { file, color, size } = validation.data;
   try {
+    // gotta change this since the size can be 0 a check is needed
+    // refactor the try which is ugly af
     let fileName = "";
     if (file && file?.name) {
       const buffer = Buffer.from(await file.arrayBuffer());
@@ -177,7 +186,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     console.log("an error occured", e);
   }
   revalidatePath("/dashboard/product");
-  redirect("/dashboard");
+  redirect("/dashboard/product");
 }
 
 export async function deleteUserAction(id: number) {

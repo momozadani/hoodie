@@ -24,7 +24,7 @@ model HoodieVariant {
     imagePath         String?
     Order             Order[]
     colorId           Int
-    Color             Color               @relation(fields: [colorId], references: [id])
+    Color             Color               @relation(fields: [colorId], references: [id], onDelete: Cascade)
     hoodieVariantSize HoodieVariantSize[]
 }
 
@@ -37,8 +37,8 @@ model Size {
 model HoodieVariantSize {
     hoodieVariantId Int
     sizeId          Int
-    HoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id])
-    Size            Size          @relation(fields: [sizeId], references: [id])
+    HoodieVariant   HoodieVariant @relation(fields: [hoodieVariantId], references: [id], onDelete: Cascade)
+    Size            Size          @relation(fields: [sizeId], references: [id], onDelete: Cascade)
     Order           Order[]
 
     @@id([hoodieVariantId, sizeId])

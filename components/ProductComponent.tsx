@@ -51,7 +51,11 @@ export default function ProductComponent({
           onSelectionChange={(sizes) => handleSelectionChange(sizes)}
         >
           {hoodieSize.map((size) => {
-            return <SelectItem key={size.name}>{size.name}</SelectItem>;
+            return (
+              <SelectItem textValue={size.name} key={size.name}>
+                {size.name}
+              </SelectItem>
+            );
           })}
         </Select>
         <h1 className="font-bold">Color: {color}</h1>

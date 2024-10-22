@@ -137,6 +137,7 @@ export default function OrderFormComponent({
                   />
                 }
                 key={color.name}
+                textValue={color.name}
               >
                 {color.name}
               </SelectItem>
