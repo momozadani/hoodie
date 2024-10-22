@@ -12,13 +12,15 @@ import SignIn from "./Sign-in";
 import { Session } from "next-auth";
 import { Avatar } from "@nextui-org/avatar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import HoodieHub from "@/public/hoodieHub.jpeg";
+import Image from "next/image";
+import { GiHoodie } from "react-icons/gi";
 
 export default function Nav({ session }: { session: Session | null }) {
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <AcmeLogo />
-        <p className="font-bold text-inherit">HoodieHub</p>
+        <GiHoodie size={40} />
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         <ActiveRoute path="/" name="/">
@@ -39,7 +41,12 @@ export default function Nav({ session }: { session: Session | null }) {
       <NavbarContent justify="end">
         {session ? (
           <NavbarItem className="flex">
-            <Avatar src={session.user.image!} />
+            <Avatar
+              src={
+                session.user.image ??
+                "https://xsgames.co/randomusers/avatar.php?g=male"
+              }
+            />
           </NavbarItem>
         ) : (
           <>

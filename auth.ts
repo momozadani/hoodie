@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session({ session, token }) {
       session.user.role = token.role!;
-      session.user.image = "https://xsgames.co/randomusers/avatar.php?g=pixel";
+      session.user.image = "https://robohash.org/bonk.png";
       return session;
     },
   },

@@ -4,11 +4,13 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Nav from "@/components/Nav";
 import { auth } from "@/auth";
+import icon from "@/public/icon.ico";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "HoodieHub",
   description: "Hoodies bestellen",
+  icons: icon.src,
 };
 
 export default async function RootLayout({
