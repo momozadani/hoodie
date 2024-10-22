@@ -1,4 +1,4 @@
-import UserTable from "./UserTable";
+import UserTable from "@/components/UserTable";
 import { prisma } from "@/prisma/prisma";
 export default async function ShowUser({ params }: { params: { id: string } }) {
   const usersAndOrder = await prisma.user.findFirst({

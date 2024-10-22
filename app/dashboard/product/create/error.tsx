@@ -42,7 +42,7 @@ export default function Error({
         </div>
 
         <Button color="secondary" endContent={<IoReturnDownBack />}>
-          <Link href="/dashboard/users"> Go Back</Link>
+          <Link href="/dashboard/product/"> Go Back</Link>
         </Button>
       </div>
     </div>

@@ -32,8 +32,8 @@ const hoodieSchema = z.object({
       return ACCEPTED_FILE_TYPES.includes(file.type);
     }, "file must a picture with png or jpg")
     .optional(),
-  size: z.string().min(1),
-  color: z.string().min(1),
+  size: z.string().min(1, "enter a size"),
+  color: z.string().min(1, "enter a color"),
 });
 
 export async function orderHoodieAction(
