@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import UsersComponent from "@/components/UsersComponent";
 import { prisma } from "@/prisma/prisma";
 

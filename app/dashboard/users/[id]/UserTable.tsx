@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table";
+import { UserAndOrder } from "@/types/user";
 const columns = [
   {
     key: "size",
@@ -27,33 +28,11 @@ const columns = [
   },
 ];
 
-interface OrderType {
-  id: number;
-  user: {
-    firstName: string;
-    lastName: string;
-  };
-  HoodieVariant: {
-    Size: {
-      name: string;
-    };
-    Color: {
-      name: string;
-    };
-  };
-  location: {
-    name: string;
-  };
-  StickColor: {
-    name: string;
-  };
-}
-
-export default function UserTable({ rows }: { rows: OrderType[] }) {
+export default function UserTable({ rows }: { rows: UserAndOrder }) {
   return (
     <>
       <h1 className="flex items-center justify-center py-4">
-        Betelllung von {rows[0].user.firstName} {rows[0].user.lastName}
+        Betelllungen von {rows.firstName} {rows.lastName}
       </h1>
       <Table aria-label="table with User content" isStriped color="secondary">
         <TableHeader columns={columns}>
@@ -61,10 +40,10 @@ export default function UserTable({ rows }: { rows: OrderType[] }) {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={rows}>
+        <TableBody items={rows.orders}>
           {(item) => (
             <TableRow key={item.id}>
-              <TableCell>{item.HoodieVariant.Size.name}</TableCell>
+              <TableCell>{item.hoodieVariantSize.Size.name}</TableCell>
               <TableCell>{item.HoodieVariant.Color.name}</TableCell>
               <TableCell>{item.StickColor.name}</TableCell>
               <TableCell>{item.location.name}</TableCell>

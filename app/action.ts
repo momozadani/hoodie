@@ -147,7 +147,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
       }
     }
   } catch (e) {
-    console.log("an error occured with upload, no picture", e);
+    console.log("an error occured during upload, no picture", e);
   }
 
   const sizeRecord = await prisma.size.upsert({

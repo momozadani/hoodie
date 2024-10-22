@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@nextui-org/table";
 import { IoCloudDownloadSharp } from "react-icons/io5";
-import { User, FlattenedUser } from "@/types/user";
+import { FlattenedUser, UserAndOrder } from "@/types/user";
 import { deleteUserAction } from "@/app/action";
 import {
   Dropdown,
@@ -22,32 +22,6 @@ import { FaEllipsisVertical } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Link from "next/link";
-
-type UserAndOrder = {
-  orders: {
-    location: {
-      name: string;
-    };
-    StickColor: {
-      name: string;
-    };
-    hoodieVariantSize: {
-      Size: {
-        name: string;
-      };
-    };
-    HoodieVariant: {
-      Color: {
-        name: string;
-      };
-    };
-  }[];
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  customerNumber: string;
-};
 
 const headers: (keyof FlattenedUser)[] = [
   "Vorname",
@@ -101,7 +75,7 @@ export default function UsersComponent({
   );
   function handleExportSelectedUser(id: number) {
     const user = usersAndOrder.filter((user) => {
-      user.id === id;
+      return user.id === id;
     });
     const rows = user.flatMap((user) => {
       return user.orders.map((order) => {

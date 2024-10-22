@@ -1,52 +1,52 @@
-import { Table } from "@nextui-org/table";
 import UserTable from "./UserTable";
 import { prisma } from "@/prisma/prisma";
-
 export default async function ShowUser({ params }: { params: { id: string } }) {
-  const getOrdersOfUser = await prisma.order.findMany({
+  const usersAndOrder = await prisma.user.findFirst({
     where: {
-      userId: parseInt(params.id),
+      id: parseInt(params.id),
     },
-    select: {
-      id: true,
-      user: {
+    include: {
+      orders: {
         select: {
-          firstName: true,
-          lastName: true,
-        },
-      },
-      HoodieVariant: {
-        select: {
-          Color: {
+          id: true,
+          StickColor: {
             select: {
               name: true,
             },
           },
-          Size: {
+          location: {
             select: {
               name: true,
             },
           },
-        },
-      },
-      location: {
-        select: {
-          name: true,
-        },
-      },
-      StickColor: {
-        select: {
-          name: true,
+          hoodieVariantSize: {
+            select: {
+              Size: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          HoodieVariant: {
+            select: {
+              Color: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
         },
       },
     },
   });
-  if (getOrdersOfUser.length === 0) {
+  if (usersAndOrder === null) {
     throw new Error("something went wrong with getting the user data");
   }
   return (
     <div className="w-full">
-      <UserTable rows={getOrdersOfUser} />
+      <UserTable rows={usersAndOrder} />
     </div>
   );
 }

@@ -5,6 +5,32 @@ export interface User {
   customerNumber: string;
   orders: Order[];
 }
+export type UserAndOrder = {
+  orders: {
+    id?: number;
+    location: {
+      name: string;
+    };
+    StickColor: {
+      name: string;
+    };
+    hoodieVariantSize: {
+      Size: {
+        name: string;
+      };
+    };
+    HoodieVariant: {
+      Color: {
+        name: string;
+      };
+    };
+  }[];
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  customerNumber: string;
+};
 interface Order {
   HoodieVariant: HoodieVariant;
   location: Location;

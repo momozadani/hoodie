@@ -20,7 +20,7 @@ export default function ProductCreateForm({
   sizes: ColorAndSize[];
 }) {
   return (
-    <div className="flex flex-col items-center justify-center w-full pt-6 gap-4">
+    <div className="flex flex-col items-center justify-center w-full gap-4 pt-6">
       <h1>Create a Hoodie </h1>
       <form
         action={uploadHoodieVariantAction}

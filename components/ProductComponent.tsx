@@ -1,16 +1,8 @@
 "use client";
 
-import { Button } from "@nextui-org/button";
 import { Card, CardHeader } from "@nextui-org/card";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
+
 import { Image } from "@nextui-org/image";
-import { HiMiniXMark } from "react-icons/hi2";
-import { IoMdCheckmark } from "react-icons/io";
 import { changeAvailabilityAction } from "@/app/action";
 import { Select, SelectItem } from "@nextui-org/select";
 import { hoodieSize } from "@/app/lib/data";
@@ -47,6 +39,9 @@ export default function ProductComponent({
           color="primary"
           label="Edit the available size"
           selectionMode="multiple"
+          classNames={{
+            value: "text-white",
+          }}
           defaultSelectedKeys={new Set<string>([...sizes])}
           onSelectionChange={(sizes) => handleSelectionChange(sizes)}
         >
@@ -58,13 +53,13 @@ export default function ProductComponent({
             );
           })}
         </Select>
-        <h1 className="font-bold">Color: {color}</h1>
+        <h1 className="font-bold dark:text-white">Color: {color}</h1>
       </CardHeader>
       <Image
         isBlurred
         removeWrapper
         alt="Card background"
-        className="z-0 object-cover w-full h-full "
+        className="z-0 object-cover w-full h-full brightness-50"
         fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
         src={imagePath ?? "https://nextui.org/images/hero-card-complete.jpeg"}
       />
