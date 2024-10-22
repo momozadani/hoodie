@@ -110,6 +110,8 @@ export async function orderHoodieAction(
       },
     });
   }
+  revalidatePath("/status");
+  redirect("/status");
 }
 
 export async function signInAction() {

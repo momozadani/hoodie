@@ -12,7 +12,7 @@ import { Checkbox, CheckboxGroup } from "@nextui-org/checkbox";
 import { Image } from "@nextui-org/image";
 
 type HoodieVarType = {
-  sizes: {
+  hoodieVariantSize: {
     Size: {
       name: string;
     };
@@ -32,6 +32,7 @@ export default function OrderFormComponent({
   const [state, formAction, pending] = useFormState(orderHoodieAction, {
     message: [],
   });
+  console.log("zod is here", state);
   const [colorList, setColorList] = useState(
     hoodieVariants.map((initialColorList) => initialColorList.Color)
   );
@@ -86,7 +87,9 @@ export default function OrderFormComponent({
       .filter((variant) => {
         return variant.Color.name === color;
       })
-      .flatMap((variant) => variant.sizes.map((size) => size.Size.name));
+      .flatMap((variant) =>
+        variant.hoodieVariantSize.map((size) => size.Size.name)
+      );
     setSizeList(colorSizes);
     const checkSizePredi = (size: string) => selectedSize.has(size);
     if (!colorSizes.some(checkSizePredi)) {
@@ -97,7 +100,7 @@ export default function OrderFormComponent({
   function handleSizeSelect(size: string | undefined): void {
     if (size !== undefined) {
       const newColorList = hoodieVariants.filter((variant) => {
-        return variant.sizes.some((val) => val.Size.name === size);
+        return variant.hoodieVariantSize.some((val) => val.Size.name === size);
       });
       setColorList(newColorList.map((c) => c.Color));
       setSelectedSize(new Set<string>([size]));

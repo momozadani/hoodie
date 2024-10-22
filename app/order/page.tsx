@@ -10,7 +10,7 @@ export default async function Order() {
           code: true,
         },
       },
-      sizes: {
+      hoodieVariantSize: {
         select: {
           Size: {
             select: {
@@ -24,7 +24,7 @@ export default async function Order() {
   return (
     <OrderFormComponent
       hoodieVariants={hoodieVariants.filter(
-        (variant) => variant.sizes.length > 0
+        (variant) => variant.hoodieVariantSize.length > 0
       )}
     />
   );

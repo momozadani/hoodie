@@ -18,6 +18,22 @@ const columns = [
 ];
 
 export default async function UserPage() {
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    include: {
+      orders: {
+        select: {
+          HoodieVariant: {
+            select: {
+              Color: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
   return <UsersComponent columns={columns} rows={users} />;
 }
