@@ -134,57 +134,55 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
     throw new Error(`${validation.error}`);
   }
   const { file, color, size } = validation.data;
+  let fileName = "";
   try {
-    // gotta change this since the size can be 0 a check is needed
-    // refactor the try which is ugly af
-    let fileName = "";
-    if (file && file?.name) {
+    if (file && file.name) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      if (buffer) {
+      if (buffer.length > 0) {
         fileName = file.name;
         const uploadDir = join(process.cwd(), "public");
         await writeFile(`${uploadDir}/${fileName}`, buffer);
       }
     }
-
-    const sizeRecord = await prisma.size.upsert({
-      where: {
-        name: size,
-      },
-      update: {},
-      create: { name: size.toUpperCase() },
-    });
-    const colorRecord = await prisma.color.upsert({
-      where: {
-        name: color,
-      },
-      update: {},
-      create: { name: color.toUpperCase(), code: "" },
-    });
-
-    const checkHoodieExistence = await prisma.hoodieVariant.findFirst({
-      where: {
-        colorId: colorRecord.id,
-      },
-    });
-    if (checkHoodieExistence !== null) {
-      throw new Error("hoodie variation already exits");
-    }
-    const hoodieVariant = await prisma.hoodieVariant.create({
-      data: {
-        colorId: colorRecord.id,
-        imagePath: fileName === "" ? null : fileName,
-      },
-    });
-    await prisma.hoodieVariantSize.create({
-      data: {
-        hoodieVariantId: hoodieVariant.id,
-        sizeId: sizeRecord.id,
-      },
-    });
   } catch (e) {
-    console.log("an error occured", e);
+    console.log("an error occured with upload, no picture", e);
   }
+
+  const sizeRecord = await prisma.size.upsert({
+    where: {
+      name: size,
+    },
+    update: {},
+    create: { name: size.toUpperCase() },
+  });
+  const colorRecord = await prisma.color.upsert({
+    where: {
+      name: color,
+    },
+    update: {},
+    create: { name: color.toUpperCase(), code: "" },
+  });
+
+  const checkHoodieExistence = await prisma.hoodieVariant.findFirst({
+    where: {
+      colorId: colorRecord.id,
+    },
+  });
+  if (checkHoodieExistence !== null) {
+    throw new Error("hoodie variation already exits");
+  }
+  const hoodieVariant = await prisma.hoodieVariant.create({
+    data: {
+      colorId: colorRecord.id,
+      imagePath: fileName === "" ? null : fileName,
+    },
+  });
+  await prisma.hoodieVariantSize.create({
+    data: {
+      hoodieVariantId: hoodieVariant.id,
+      sizeId: sizeRecord.id,
+    },
+  });
   revalidatePath("/dashboard/product");
   redirect("/dashboard/product");
 }
