@@ -126,6 +126,7 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
   if (formData === null) {
     throw new Error("form should not be empty");
   }
+  console.log("the file i am getting", formData);
   const validation = hoodieSchema.safeParse({
     file: formData?.get("file"),
     color: formData?.get("color"),

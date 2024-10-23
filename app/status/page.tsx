@@ -1,7 +1,6 @@
 import { prisma } from "@/prisma/prisma";
 import UserTable from "@/components/UserTable";
 import { auth } from "@/auth";
-import { redirect } from "next/dist/server/api-utils";
 import { permanentRedirect } from "next/navigation";
 export default async function Status() {
   const session = await auth();

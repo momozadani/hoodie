@@ -2,7 +2,6 @@
 
 import { Button } from "@nextui-org/button";
 import { orderHoodieAction } from "@/app/action";
-import { hoodieSize } from "@/app/lib/data";
 import { Select, SelectItem } from "@nextui-org/select";
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { useFormState } from "react-dom";
@@ -35,7 +34,14 @@ export default function OrderFormComponent({
   const [colorList, setColorList] = useState(
     hoodieVariants.map((initialColorList) => initialColorList.Color)
   );
-  const [sizeList, setSizeList] = useState(hoodieSize.map((s) => s.name));
+  // initialize all of the sizes in a set
+  const hoodieSize = new Set<string>();
+  hoodieVariants.map((variant) => {
+    variant.hoodieVariantSize.map((size) => {
+      hoodieSize.add(size.Size.name);
+    });
+  });
+  const [sizeList, setSizeList] = useState(Array.from(hoodieSize.values()));
 
   // for handling the case when the size does not exists in the color when size already selected
   const [selectedSize, setSelectedSize] = useState(new Set<string>([""]));
@@ -80,7 +86,7 @@ export default function OrderFormComponent({
   function handleColorSelect(color: string | undefined) {
     if (color === undefined) {
       setSelectedColor(new Set<string>([""]));
-      setSizeList(hoodieSize.map((s) => s.name));
+      setSizeList(Array.from(hoodieSize.values()));
       return;
     }
     setSelectedColor(new Set<string>([color]));
@@ -136,6 +142,9 @@ export default function OrderFormComponent({
                   <Image
                     width={20}
                     height={20}
+                    fallbackSrc={
+                      "https://nextui.org/images/card-example-2.jpeg"
+                    }
                     src={`/colors/${color.code}` + ".png"}
                     alt={color.name}
                   />

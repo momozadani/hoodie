@@ -12,13 +12,19 @@ type ProductDetails = {
   hoodieId: number;
   sizes: string[];
   color: string;
+  allSizes: AllSizes;
   imagePath: string | null;
 };
+type AllSizes = {
+  id: number;
+  name: string;
+}[];
 
 export default function ProductComponent({
   hoodieId,
   sizes,
   color,
+  allSizes,
   imagePath,
 }: ProductDetails) {
   async function handleSelectionChange(
@@ -30,9 +36,15 @@ export default function ProductComponent({
     }
     await changeAvailabilityAction(sizeList, hoodieId);
   }
+  let newImagePath = "";
+  if (imagePath === null || imagePath === undefined) {
+    newImagePath = "https://nextui.org/images/hero-card-complete.jpeg";
+  } else {
+    newImagePath = "/" + imagePath;
+  }
 
   return (
-    <Card className="border-none h-fit">
+    <Card className="border-none h-fit radius-lg">
       <CardHeader className="absolute z-10 flex-col items-start gap-3">
         <Select
           variant="bordered"
@@ -45,7 +57,7 @@ export default function ProductComponent({
           defaultSelectedKeys={new Set<string>([...sizes])}
           onSelectionChange={(sizes) => handleSelectionChange(sizes)}
         >
-          {hoodieSize.map((size) => {
+          {allSizes.map((size) => {
             return (
               <SelectItem textValue={size.name} key={size.name}>
                 {size.name}
@@ -59,9 +71,10 @@ export default function ProductComponent({
         isBlurred
         removeWrapper
         alt="Card background"
+        height={200}
         className="z-0 object-cover w-full h-full brightness-50"
         fallbackSrc="https://nextui.org/images/hero-card-complete.jpeg"
-        src={imagePath ?? "https://nextui.org/images/hero-card-complete.jpeg"}
+        src={newImagePath}
       />
     </Card>
   );

@@ -32,7 +32,7 @@ export default function UserTable({ rows }: { rows: UserAndOrder }) {
   return (
     <>
       <h1 className="flex items-center justify-center py-4">
-        Betelllungen von {rows.firstName} {rows.lastName}
+        Bestellung von {rows.firstName} {rows.lastName}
       </h1>
       <Table aria-label="table with User content" isStriped color="secondary">
         <TableHeader columns={columns}>

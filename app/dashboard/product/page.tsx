@@ -18,6 +18,7 @@ export default async function ProductPage() {
       },
     },
   });
+  const allSizes = await prisma.size.findMany({});
   return (
     <div className="flex flex-col w-full">
       <Button color="primary" className="self-center my-5">
@@ -32,6 +33,7 @@ export default async function ProductPage() {
               sizes={hoodie.hoodieVariantSize.map(
                 (sizeArray) => sizeArray.Size.name
               )}
+              allSizes={allSizes}
               color={hoodie.Color.name}
               imagePath={hoodie.imagePath}
             />
