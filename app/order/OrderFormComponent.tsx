@@ -184,14 +184,14 @@ export default function OrderFormComponent({
           isInvalid={hasError.stickColor}
           onFocus={() => handleFocus("stickColor")}
         >
-          <Radio value="schwarz">schwarz</Radio>
-          <Radio value="weiß">weiß</Radio>
+          <Radio value="black">schwarz</Radio>
+          <Radio value="white">weiß</Radio>
         </RadioGroup>
 
         <RadioGroup
           onValueChange={(val) => setShippingCost(val)}
           color="primary"
-          label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
+          label="Ich möchten den Hoodie bestellen..."
           name="location"
           defaultValue={"tower"}
           value={shippingCost}

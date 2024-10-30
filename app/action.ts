@@ -92,6 +92,12 @@ export async function orderHoodieAction(
       customerNumber: customerNumber,
     },
   });
+  console.log("hoodieVariantRecord:", hoodieVariantRecord);
+  console.log("userRecord:", userRecord);
+  console.log("locationRecord:", locationRecord);
+  console.log("stickColorRecord:", stickColorRecord);
+  console.log("sizeRecord:", sizeRecord);
+
   if (
     hoodieVariantRecord &&
     userRecord &&
@@ -99,6 +105,7 @@ export async function orderHoodieAction(
     stickColorRecord &&
     sizeRecord
   ) {
+    console.log("it is here ");
     await prisma.order.create({
       data: {
         hoodieVariantId: hoodieVariantRecord.id,
@@ -196,7 +203,7 @@ export async function deleteUserAction(id: number) {
     redirect("/");
   }
   if (session.user.role === ADMIN) {
-    const deletedUser = await prisma.user.delete({
+    await prisma.user.delete({
       where: {
         id: id,
       },

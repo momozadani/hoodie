@@ -1,0 +1,90 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  firstName String [not null]
+  lastName String [not null]
+  email String [unique, not null]
+  customerNumber String [not null]
+  orders Order [not null]
+}
+
+Table HoodieVariant {
+  id Int [pk, increment]
+  imagePath String
+  Order Order [not null]
+  colorId Int [not null]
+  Color Color [not null]
+  hoodieVariantSize HoodieVariantSize [not null]
+}
+
+Table Size {
+  id Int [pk, increment]
+  name String [unique, not null]
+  hoodieVariantSize HoodieVariantSize [not null]
+}
+
+Table HoodieVariantSize {
+  hoodieVariantId Int [not null]
+  sizeId Int [not null]
+  HoodieVariant HoodieVariant [not null]
+  Size Size [not null]
+  Order Order [not null]
+
+  indexes {
+    (hoodieVariantId, sizeId) [pk]
+  }
+}
+
+Table Color {
+  id Int [pk, increment]
+  name String [unique, not null]
+  code String [not null]
+  variants HoodieVariant [not null]
+}
+
+Table Order {
+  id Int [pk, increment]
+  user User [not null]
+  userId Int [not null]
+  hoodieVariantSize HoodieVariantSize [not null]
+  hoodieVariantId Int [not null]
+  sizeId Int [not null]
+  quantity Int [not null]
+  location Location [not null]
+  locationId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  StickColor StickColor [not null]
+  stickColorId Int [not null]
+  HoodieVariant HoodieVariant [not null]
+}
+
+Table StickColor {
+  id Int [pk, increment]
+  name String [unique, not null]
+  order Order [not null]
+}
+
+Table Location {
+  id Int [pk, increment]
+  name String [unique, not null]
+  order Order [not null]
+}
+
+Ref: HoodieVariant.colorId > Color.id [delete: Cascade]
+
+Ref: HoodieVariantSize.hoodieVariantId > HoodieVariant.id [delete: Cascade]
+
+Ref: HoodieVariantSize.sizeId > Size.id [delete: Cascade]
+
+Ref: Order.userId > User.id [delete: Cascade]
+
+Ref: Order.(hoodieVariantId, sizeId) > HoodieVariantSize.(hoodieVariantId, sizeId)
+
+Ref: Order.locationId > Location.id
+
+Ref: Order.stickColorId > StickColor.id
+
+Ref: Order.hoodieVariantId > HoodieVariant.id
