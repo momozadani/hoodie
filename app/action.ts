@@ -231,6 +231,5 @@ export async function changeAvailabilityAction(
       };
     }),
   });
-
   revalidatePath("/dashboard/product");
 }
