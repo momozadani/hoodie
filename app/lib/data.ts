@@ -46,3 +46,16 @@ export const colors = [
 export const ADMIN_ROLE = ["mohammad.akbari@hmmh.de"];
 export const ADMIN = "admin";
 export const USER = "user";
+
+export enum OrderForm {
+  Color = "color",
+  Size = "size",
+  StickColor = "stickColor",
+  StickColorBlack = "black",
+  StickColorWhite = "white",
+  LocationName = "location",
+  LocationTower = "tower",
+  LocationHome = "home",
+  Consent = "consent",
+  EmployeeNumber = "employeeNumber",
+}

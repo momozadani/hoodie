@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Checkbox, CheckboxGroup } from "@nextui-org/checkbox";
 import { Image } from "@nextui-org/image";
+import { OrderForm } from "../lib/data";
 
 type HoodieVarType = {
   hoodieVariantSize: {
@@ -60,19 +61,19 @@ export default function OrderFormComponent({
     if (Array.isArray(state?.message)) {
       const newError = { ...hasError };
       state.message.forEach((error) => {
-        if (error.path.includes("stickColor")) {
+        if (error.path.includes(OrderForm.StickColor)) {
           newError.stickColor = true;
         }
-        if (error.path.includes("consent")) {
+        if (error.path.includes(OrderForm.Consent)) {
           newError.consent = true;
         }
-        if (error.path.includes("employeeNumber")) {
+        if (error.path.includes(OrderForm.EmployeeNumber)) {
           newError.employeeNumber = true;
         }
-        if (error.path.includes("size")) {
+        if (error.path.includes(OrderForm.Size)) {
           newError.size = true;
         }
-        if (error.path.includes("color")) {
+        if (error.path.includes(OrderForm.Color)) {
           newError.color = true;
         }
       });
@@ -126,13 +127,13 @@ export default function OrderFormComponent({
           <Select
             color="primary"
             required
-            name="color"
-            label="Favorite color"
-            placeholder="Select a color for hoodie"
+            name={OrderForm.Color}
+            label="Farbe des Hoodies"
+            placeholder="Wähle eine Farbe"
             className="max-w-xs"
-            errorMessage="please select a color"
+            errorMessage="Farbe fehlt"
             isInvalid={hasError.color}
-            onFocus={() => handleFocus("color")}
+            onFocus={() => handleFocus(OrderForm.Color)}
             selectedKeys={selectedColor}
             onSelectionChange={(val) => handleColorSelect(val.currentKey)}
           >
@@ -158,15 +159,15 @@ export default function OrderFormComponent({
           </Select>
           <Select
             color="primary"
-            name="size"
-            label="Favorite size"
-            placeholder="Select a size for hoodie"
+            name={OrderForm.Size}
+            label="Größe des Hoodies"
+            placeholder="Wähle eine Größe"
             className="max-w-xs"
-            errorMessage="please select a size"
+            errorMessage="eine Größe fehlt"
             isInvalid={hasError.size}
             selectedKeys={selectedSize}
             onSelectionChange={(val) => handleSizeSelect(val.currentKey)}
-            onFocus={() => handleFocus("size")}
+            onFocus={() => handleFocus(OrderForm.Size)}
           >
             {sizeList.map((size) => (
               <SelectItem textValue={size} key={size}>
@@ -178,28 +179,28 @@ export default function OrderFormComponent({
         <RadioGroup
           color="primary"
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
-          name="stickColor"
+          name={OrderForm.StickColor}
           errorMessage="please select a stick color"
           isRequired
           isInvalid={hasError.stickColor}
-          onFocus={() => handleFocus("stickColor")}
+          onFocus={() => handleFocus(OrderForm.StickColor)}
         >
-          <Radio value="black">schwarz</Radio>
-          <Radio value="white">weiß</Radio>
+          <Radio value={OrderForm.StickColorBlack}>schwarz</Radio>
+          <Radio value={OrderForm.StickColorWhite}>weiß</Radio>
         </RadioGroup>
 
         <RadioGroup
           onValueChange={(val) => setShippingCost(val)}
           color="primary"
           label="Ich möchten den Hoodie bestellen..."
-          name="location"
-          defaultValue={"tower"}
+          name={OrderForm.LocationName}
+          defaultValue={OrderForm.LocationTower}
           value={shippingCost}
         >
-          <Radio required value="tower">
+          <Radio required value={OrderForm.LocationTower}>
             in den Tower
           </Radio>
-          <Radio required value="home">
+          <Radio required value={OrderForm.LocationHome}>
             zu mir nach Hause (bitte beachte, dass das mit Mehrkosten (6,99€)
             verbunden ist, die du selbst trägst)
           </Radio>
@@ -213,12 +214,12 @@ export default function OrderFormComponent({
             zutreffend von meinem Nettoverdienst einbehalten wird`}
           errorMessage="please consent"
           isInvalid={hasError.consent}
-          onFocus={() => handleFocus("consent")}
+          onFocus={() => handleFocus(OrderForm.Consent)}
         >
-          <input type="hidden" name="consent" value="" />
+          <input type="hidden" name={OrderForm.Consent} value="" />
           <Checkbox
             type="checkbox"
-            name="consent"
+            name={OrderForm.Consent}
             value="true"
             required
             className="pt-4"
@@ -236,15 +237,15 @@ export default function OrderFormComponent({
             für die Abrechnung, du findest sie auf deiner digitalen
             Gehaltsabrechnung)"
           placeholder=" "
-          id="employeeNumber"
-          name="employeeNumber"
+          id={OrderForm.EmployeeNumber}
+          name={OrderForm.EmployeeNumber}
           type="number"
           inputMode="numeric"
           labelPlacement="outside"
           isClearable
           errorMessage="number is too short"
           isInvalid={hasError.employeeNumber}
-          onFocus={() => handleFocus("employeeNumber")}
+          onFocus={() => handleFocus(OrderForm.EmployeeNumber)}
           onWheel={(e) => e.currentTarget.blur()}
         />
 
