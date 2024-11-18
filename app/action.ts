@@ -14,13 +14,8 @@ const schema = z.object({
   color: z.string().min(1),
   stickColor: z.string(),
   location: z.string(),
-  customerNumber: z.string().min(5),
-  consent: z.coerce.boolean().refine(
-    (val) => {
-      return val === true;
-    },
-    { message: "you must consent" }
-  ),
+  employeeNumber: z.string().min(5),
+  consent: z.coerce.boolean({ required_error: "You must consent" }),
 });
 const ACCEPTED_FILE_TYPES = ["image/png", "image/jpg"];
 
@@ -49,7 +44,7 @@ export async function orderHoodieAction(
   if (!res.success) {
     return { message: res.error.errors };
   }
-  const { size, color, stickColor, location, consent, customerNumber } =
+  const { size, color, stickColor, location, consent, employeeNumber } =
     res.data;
 
   const locationRecord = await prisma.location.findFirst({
@@ -78,7 +73,6 @@ export async function orderHoodieAction(
     },
   });
   const userSession = session.user;
-  // wer are asserting here because no way this gets called without users since it is intern
   const name = userSession.name?.split(" ")!;
   const userRecord = await prisma.user.upsert({
     where: {
@@ -89,14 +83,9 @@ export async function orderHoodieAction(
       firstName: name[0],
       lastName: name[1],
       email: userSession.email!,
-      customerNumber: customerNumber,
+      employeeNumber: employeeNumber,
     },
   });
-  console.log("hoodieVariantRecord:", hoodieVariantRecord);
-  console.log("userRecord:", userRecord);
-  console.log("locationRecord:", locationRecord);
-  console.log("stickColorRecord:", stickColorRecord);
-  console.log("sizeRecord:", sizeRecord);
 
   if (
     hoodieVariantRecord &&
@@ -105,7 +94,6 @@ export async function orderHoodieAction(
     stickColorRecord &&
     sizeRecord
   ) {
-    console.log("it is here ");
     await prisma.order.create({
       data: {
         hoodieVariantId: hoodieVariantRecord.id,
@@ -133,7 +121,6 @@ export async function uploadHoodieVariantAction(formData: FormData | null) {
   if (formData === null) {
     throw new Error("form should not be empty");
   }
-  console.log("the file i am getting", formData);
   const validation = hoodieSchema.safeParse({
     file: formData?.get("file"),
     color: formData?.get("color"),

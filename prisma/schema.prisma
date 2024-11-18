@@ -19,7 +19,7 @@ model User {
     firstName      String
     lastName       String
     email          String  @unique
-    customerNumber String
+    employeeNumber String
     orders         Order[]
 }
 

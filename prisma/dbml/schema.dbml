@@ -7,7 +7,7 @@ Table User {
   firstName String [not null]
   lastName String [not null]
   email String [unique, not null]
-  customerNumber String [not null]
+  employeeNumber String [not null]
   orders Order [not null]
 }
 

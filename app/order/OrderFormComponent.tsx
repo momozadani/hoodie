@@ -50,7 +50,7 @@ export default function OrderFormComponent({
   const [hasError, setHasError] = useState({
     stickColor: false,
     consent: false,
-    customerNumber: false,
+    employeeNumber: false,
     size: false,
     color: false,
   });
@@ -66,8 +66,8 @@ export default function OrderFormComponent({
         if (error.path.includes("consent")) {
           newError.consent = true;
         }
-        if (error.path.includes("customerNumber")) {
-          newError.customerNumber = true;
+        if (error.path.includes("employeeNumber")) {
+          newError.employeeNumber = true;
         }
         if (error.path.includes("size")) {
           newError.size = true;
@@ -236,15 +236,15 @@ export default function OrderFormComponent({
             für die Abrechnung, du findest sie auf deiner digitalen
             Gehaltsabrechnung)"
           placeholder=" "
-          id="customerNumber"
-          name="customerNumber"
+          id="employeeNumber"
+          name="employeeNumber"
           type="number"
           inputMode="numeric"
           labelPlacement="outside"
           isClearable
           errorMessage="number is too short"
-          isInvalid={hasError.customerNumber}
-          onFocus={() => handleFocus("customerNumber")}
+          isInvalid={hasError.employeeNumber}
+          onFocus={() => handleFocus("employeeNumber")}
           onWheel={(e) => e.currentTarget.blur()}
         />
 
