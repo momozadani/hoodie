@@ -44,7 +44,6 @@ export default function OrderFormComponent({
   });
   const [sizeList, setSizeList] = useState(Array.from(hoodieSize.values()));
 
-  // for handling the case when the size does not exists in the color when size already selected
   const [selectedSize, setSelectedSize] = useState(new Set<string>([""]));
   const [selectedColor, setSelectedColor] = useState(new Set<string>([""]));
 
@@ -55,8 +54,6 @@ export default function OrderFormComponent({
     size: false,
     color: false,
   });
-  //  this useEffect could be removed prob.
-  //  just do not use the hasError ? kein Bock
   useEffect(() => {
     if (Array.isArray(state?.message)) {
       const newError = { ...hasError };
@@ -131,7 +128,7 @@ export default function OrderFormComponent({
             label="Farbe des Hoodies"
             placeholder="Wähle eine Farbe"
             className="max-w-xs"
-            errorMessage="Farbe fehlt"
+            errorMessage="Bitte wähle eine Farbe aus"
             isInvalid={hasError.color}
             onFocus={() => handleFocus(OrderForm.Color)}
             selectedKeys={selectedColor}
@@ -163,7 +160,7 @@ export default function OrderFormComponent({
             label="Größe des Hoodies"
             placeholder="Wähle eine Größe"
             className="max-w-xs"
-            errorMessage="eine Größe fehlt"
+            errorMessage="Bitte wähle eine Größe aus"
             isInvalid={hasError.size}
             selectedKeys={selectedSize}
             onSelectionChange={(val) => handleSizeSelect(val.currentKey)}
@@ -180,7 +177,7 @@ export default function OrderFormComponent({
           color="primary"
           label="Ich möchte den Stick auf meinem Hoodie in der Farbe..."
           name={OrderForm.StickColor}
-          errorMessage="please select a stick color"
+          errorMessage="Bitte wähle eine Stickfarbe aus"
           isRequired
           isInvalid={hasError.stickColor}
           onFocus={() => handleFocus(OrderForm.StickColor)}
@@ -201,8 +198,8 @@ export default function OrderFormComponent({
             in den Tower
           </Radio>
           <Radio required value={OrderForm.LocationHome}>
-            zu mir nach Hause (bitte beachte, dass das mit Mehrkosten (6,99€)
-            verbunden ist, die du selbst trägst)
+            zu mir nach Hause (bitte beachte, dass das mit zusätzlichen Kosten
+            von 6,99€ verbunden ist, die du selbst trägst)
           </Radio>
         </RadioGroup>
 
@@ -212,7 +209,7 @@ export default function OrderFormComponent({
               shippingCost === "home" ? " + 6,99€ für den Versand" : ""
             }, falls
             zutreffend von meinem Nettoverdienst einbehalten wird`}
-          errorMessage="please consent"
+          errorMessage="Bitte stimme zu"
           isInvalid={hasError.consent}
           onFocus={() => handleFocus(OrderForm.Consent)}
         >
@@ -233,9 +230,9 @@ export default function OrderFormComponent({
             label: "text-medium text-foreground-500",
           }}
           color="primary"
-          label="*Bitte trage hier noch deine Personalnummer ein (diese benötigt HR
-            für die Abrechnung, du findest sie auf deiner digitalen
-            Gehaltsabrechnung)"
+          label="*Bitte trage hier noch deine Personalnummer ein (HR benötigt diese
+            für die Abrechnung. Du findest sie auf deiner digitalen
+            Gehaltsabrechnung)."
           placeholder=" "
           id={OrderForm.EmployeeNumber}
           name={OrderForm.EmployeeNumber}
@@ -243,7 +240,7 @@ export default function OrderFormComponent({
           inputMode="numeric"
           labelPlacement="outside"
           isClearable
-          errorMessage="number is too short"
+          errorMessage="Nummer zu kurz"
           isInvalid={hasError.employeeNumber}
           onFocus={() => handleFocus(OrderForm.EmployeeNumber)}
           onWheel={(e) => e.currentTarget.blur()}
