@@ -82,6 +82,7 @@ export default function OrderFormComponent({
     setHasError((prevError) => ({ ...prevError, [field]: false }));
   }
   function handleColorSelect(color: string | undefined) {
+    console.log("color incoming", color);
     if (color === undefined) {
       setSelectedColor(new Set<string>([""]));
       setSizeList(Array.from(hoodieSize.values()));

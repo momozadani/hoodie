@@ -44,7 +44,9 @@ export default function UserTable({ rows }: { rows: UserAndOrder }) {
           {(item) => (
             <TableRow key={item.id}>
               <TableCell>{item.hoodieVariantSize.Size.name}</TableCell>
-              <TableCell>{item.HoodieVariant.Color.name}</TableCell>
+              <TableCell>
+                {item.hoodieVariantSize.HoodieVariant.Color.name}
+              </TableCell>
               <TableCell>{item.StickColor.name}</TableCell>
               <TableCell>{item.location.name}</TableCell>
             </TableRow>

@@ -21,16 +21,16 @@ export default async function ShowUser({ params }: { params: { id: string } }) {
           },
           hoodieVariantSize: {
             select: {
-              Size: {
+              HoodieVariant: {
                 select: {
-                  name: true,
+                  Color: {
+                    select: {
+                      name: true,
+                    },
+                  },
                 },
               },
-            },
-          },
-          HoodieVariant: {
-            select: {
-              Color: {
+              Size: {
                 select: {
                   name: true,
                 },

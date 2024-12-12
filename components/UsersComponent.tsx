@@ -54,8 +54,8 @@ export default function UsersComponent({
           email: user.email,
           Vorname: user.firstName,
           Nachname: user.lastName,
-          PersonalNummer: user.customerNumber,
-          HoodieFarbe: order.HoodieVariant.Color.name,
+          PersonalNummer: user.employeeNumber,
+          HoodieFarbe: order.hoodieVariantSize.HoodieVariant.Color.name,
           HoodieSize: order.hoodieVariantSize.Size.name,
           StickFarbe: order.StickColor.name,
           Ort: order.location.name,
@@ -65,9 +65,9 @@ export default function UsersComponent({
     downloadData(rows, "All-users");
   }
   const rows = usersAndOrder.map(
-    ({ customerNumber, id, email, firstName, lastName }) => ({
+    ({ employeeNumber, id, email, firstName, lastName }) => ({
       id,
-      customerNumber,
+      employeeNumber,
       email,
       firstName,
       lastName,
@@ -83,8 +83,8 @@ export default function UsersComponent({
           email: user.email,
           Vorname: user.firstName,
           Nachname: user.lastName,
-          PersonalNummer: user.customerNumber,
-          HoodieFarbe: order.HoodieVariant.Color.name,
+          PersonalNummer: user.employeeNumber,
+          HoodieFarbe: order.hoodieVariantSize.HoodieVariant.Color.name,
           HoodieSize: order.hoodieVariantSize.Size.name,
           StickFarbe: order.StickColor.name,
           Ort: order.location.name,
@@ -132,7 +132,7 @@ export default function UsersComponent({
           {(item) => (
             <TableRow key={item.id}>
               <TableCell>{item.firstName + " " + item.lastName}</TableCell>
-              <TableCell>{item.customerNumber}</TableCell>
+              <TableCell>{item.employeeNumber}</TableCell>
               <TableCell>
                 <Dropdown>
                   <DropdownTrigger>

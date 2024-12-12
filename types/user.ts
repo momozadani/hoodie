@@ -15,12 +15,12 @@ export type UserAndOrder = {
       name: string;
     };
     hoodieVariantSize: {
-      Size: {
-        name: string;
+      HoodieVariant: {
+        Color: {
+          name: string;
+        };
       };
-    };
-    HoodieVariant: {
-      Color: {
+      Size: {
         name: string;
       };
     };
@@ -29,7 +29,7 @@ export type UserAndOrder = {
   firstName: string;
   lastName: string;
   email: string;
-  customerNumber: string;
+  employeeNumber: string;
 };
 interface Order {
   HoodieVariant: HoodieVariant;

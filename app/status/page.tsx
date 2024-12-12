@@ -32,16 +32,16 @@ export default async function Status() {
           },
           hoodieVariantSize: {
             select: {
-              Size: {
+              HoodieVariant: {
                 select: {
-                  name: true,
+                  Color: {
+                    select: {
+                      name: true,
+                    },
+                  },
                 },
               },
-            },
-          },
-          HoodieVariant: {
-            select: {
-              Color: {
+              Size: {
                 select: {
                   name: true,
                 },

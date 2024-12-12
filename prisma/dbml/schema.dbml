@@ -14,7 +14,6 @@ Table User {
 Table HoodieVariant {
   id Int [pk, increment]
   imagePath String
-  Order Order [not null]
   colorId Int [not null]
   Color Color [not null]
   hoodieVariantSize HoodieVariantSize [not null]
@@ -58,7 +57,6 @@ Table Order {
   createdAt DateTime [default: `now()`, not null]
   StickColor StickColor [not null]
   stickColorId Int [not null]
-  HoodieVariant HoodieVariant [not null]
 }
 
 Table StickColor {
@@ -86,5 +84,3 @@ Ref: Order.(hoodieVariantId, sizeId) > HoodieVariantSize.(hoodieVariantId, sizeI
 Ref: Order.locationId > Location.id
 
 Ref: Order.stickColorId > StickColor.id
-
-Ref: Order.hoodieVariantId > HoodieVariant.id

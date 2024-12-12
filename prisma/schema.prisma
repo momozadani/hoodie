@@ -26,7 +26,6 @@ model User {
 model HoodieVariant {
     id                Int                 @id @default(autoincrement())
     imagePath         String?
-    Order             Order[]
     colorId           Int
     Color             Color               @relation(fields: [colorId], references: [id], onDelete: Cascade)
     hoodieVariantSize HoodieVariantSize[]
@@ -68,7 +67,6 @@ model Order {
     createdAt         DateTime          @default(now())
     StickColor        StickColor        @relation(fields: [stickColorId], references: [id])
     stickColorId      Int
-    HoodieVariant     HoodieVariant     @relation(fields: [hoodieVariantId], references: [id])
 }
 
 model StickColor {
